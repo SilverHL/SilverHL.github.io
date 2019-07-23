@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="#LeetCode 42 Trapping Rain Waters 题目 Given n non-negative integers representing an elevation map where the width of each bar is 1,compute how much water it is able to trap after raining.  题解这个题其实很有意思，">
+<meta name="description" content="LeetCode 42 Trapping Rain Waters题目 Given n non-negative integers representing an elevation map where the width of each bar is 1,compute how much water it is able to trap after raining.  题解这个题其实很有意思，一开">
 <meta name="keywords" content="C++,LeetCode">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LeetCode-42-TrappingRainWaters">
 <meta property="og:url" content="http://yoursite.c/2019/07/22/LeetCode-42-TrappingRainWaters/index.html">
 <meta property="og:site_name" content="Neo刷水题的地方">
-<meta property="og:description" content="#LeetCode 42 Trapping Rain Waters 题目 Given n non-negative integers representing an elevation map where the width of each bar is 1,compute how much water it is able to trap after raining.  题解这个题其实很有意思，">
+<meta property="og:description" content="LeetCode 42 Trapping Rain Waters题目 Given n non-negative integers representing an elevation map where the width of each bar is 1,compute how much water it is able to trap after raining.  题解这个题其实很有意思，一开">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://assets.leetcode.com/uploads/2018/10/22/rainwatertrap.png">
-<meta property="og:updated_time" content="2019-07-22T15:38:48.255Z">
+<meta property="og:updated_time" content="2019-07-23T01:28:49.168Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LeetCode-42-TrappingRainWaters">
-<meta name="twitter:description" content="#LeetCode 42 Trapping Rain Waters 题目 Given n non-negative integers representing an elevation map where the width of each bar is 1,compute how much water it is able to trap after raining.  题解这个题其实很有意思，">
+<meta name="twitter:description" content="LeetCode 42 Trapping Rain Waters题目 Given n non-negative integers representing an elevation map where the width of each bar is 1,compute how much water it is able to trap after raining.  题解这个题其实很有意思，一开">
 <meta name="twitter:image" content="https://assets.leetcode.com/uploads/2018/10/22/rainwatertrap.png">
 
 
@@ -322,8 +322,7 @@
       
 
       
-        <p>#LeetCode 42 Trapping Rain Waters</p>
-<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
+        <h1 id="LeetCode-42-Trapping-Rain-Waters"><a href="#LeetCode-42-Trapping-Rain-Waters" class="headerlink" title="LeetCode 42 Trapping Rain Waters"></a>LeetCode 42 Trapping Rain Waters</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
 <p>Given n non-negative integers representing an elevation map where the width of each bar is 1,<br>compute how much water it is able to trap after raining.<br><img src="https://assets.leetcode.com/uploads/2018/10/22/rainwatertrap.png" alt="test"></p>
 </blockquote>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这个题其实很有意思，一开始刷的时候，感觉无从下手，但是第二次刷就好很多，起码有个大概思路，用了<br>两种思路来解这道题。</p>
@@ -332,7 +331,7 @@
 <li>MonoStack</li>
 </ul>
 <h3 id="Two-Pointers"><a href="#Two-Pointers" class="headerlink" title="Two Pointers"></a>Two Pointers</h3><p>我们可以先理清楚最基本的问题，能Trap住雨水的，一定是有凹槽存在，而这个凹槽能容纳多少水，一定是<br>以它两端中最低的这端作为Base，除此之外，应该是两端各取最大值，以达到容纳最多水的效果。举个🌰。</p>
-<p><em>Lmax L R Rmax\</em></p>
+<p><em>Lmax L R Rmax</em></p>
 <p>此时，如果LMax &lt; Rmax,  我们可以计算L点的水量，因为此时，我们以LMax为短板，那么一定有Rmax &gt; LMax<br>所以我们可以将L处的水量，即Lmax - L 加入到水量中，反之，则加入RMax - R。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> right = height.size()<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> leftMax = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> rightMax = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (left &lt; right)</span><br><span class="line">    &#123;</span><br><span class="line">        leftMax = max(height[left], leftMax);</span><br><span class="line">        rightMax = max(height[right], rightMax);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (leftMax &gt; rightMax) &#123;</span><br><span class="line">            res += rightMax - height[right];</span><br><span class="line">            right--;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res += leftMax - height[left];</span><br><span class="line">            left++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -512,7 +511,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题解"><span class="nav-number">2.</span> <span class="nav-text">题解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Two-Pointers"><span class="nav-number">2.1.</span> <span class="nav-text">Two Pointers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MonoStack"><span class="nav-number">2.2.</span> <span class="nav-text">MonoStack</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LeetCode-42-Trapping-Rain-Waters"><span class="nav-number">1.</span> <span class="nav-text">LeetCode 42 Trapping Rain Waters</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-number">1.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题解"><span class="nav-number">1.2.</span> <span class="nav-text">题解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Two-Pointers"><span class="nav-number">1.2.1.</span> <span class="nav-text">Two Pointers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MonoStack"><span class="nav-number">1.2.2.</span> <span class="nav-text">MonoStack</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>
