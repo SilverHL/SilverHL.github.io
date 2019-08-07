@@ -249,6 +249,133 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/08/07/Leetcode-828-UniqueLetterString/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Neo">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Neo刷水题的地方">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/07/Leetcode-828-UniqueLetterString/" itemprop="url">Leetcode-828-UniqueLetterString</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-07T13:26:04+08:00">
+                2019-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Leetcode 828 UniqueLetterString</p>
+<h1 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h1><blockquote>
+<p>A character is unique in string S if it occurs exactly once in it.<br>For example, in string S = “LETTER”, the only unique characters are “L” and “R”.<br>Let’s define UNIQ(S) as the number of unique characters in string S.<br>For example, UNIQ(“LETTER”) =  2.<br>Given a string S with only uppercases, calculate the sum of UNIQ(substring) over all non-empty substrings of S.<br>If there are two or more equal substrings at different positions in S, we consider them different.<br>Since the answer can be very large, return the answer modulo 10 ^ 9 + 7.</p>
+</blockquote>
+<p>题意其实很好理解，给定一个字符串S，其中仅出现一次的字符数量用UNIQ(S)表示，若S=”LETTER”, 那么其中UNIQ(S)=2, 为”L”与”R”，这个题需要<br>求得的结果是，给定的S的所有字串的UNIQ()的值。</p>
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><p>我们可以换一个角度来思考这道题，以字符串”XAXXAXXA”为例，假设我们需要得出以第二个”A”作为unique char的所有子串数量，我们可以在左右加入()<br>来表示，那可能的左边字串有”XA(XXA”/“XAX(XA”/“XAXX(A”,可能的右边字串有”AXX)”/“AX)X”/“A)XX”,各有3种，3*3=9，所以我们可以遍历每个char，<br>分别求出以当前char为unique char的所有字串数量即为题解。</p>
+<h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL long long</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">uniqueLetterString</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> mod = <span class="number">1000000007</span>;</span><br><span class="line">    <span class="keyword">int</span> n = S.length();</span><br><span class="line">    LL ans = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; last(<span class="number">26</span>, <span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; left(n, <span class="number">-1</span>), right(n, n);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        left[i] = last[S[i] - <span class="string">'A'</span>];</span><br><span class="line">        last[S[i] - <span class="string">'A'</span>] = i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    last = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; (<span class="number">26</span>, n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n<span class="number">-1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">    &#123;</span><br><span class="line">        right[i] = last[S[i] - <span class="string">'A'</span>];</span><br><span class="line">        last[S[i] - <span class="string">'A'</span>] = i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">       ans += (ans + (LL)(i - left[i]) * (right[i] - i)) % mod;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/07/24/bind/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1386,7 +1513,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
