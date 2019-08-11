@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C++,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="弱回调技术 最近在拜读陈硕老师的《Linux多线程服务器端编程》，从第一章开始就觉得自己菜 = =，因为书中涉及的知识是我之前仅仅了解了皮毛，甚至是仅有耳闻的内容。所以这本书读起来很吃力，而且需要反复的去品味其中运用的技术。  从第一章来看，主要讲的shared_ptr与weak_ptr的运用，其实大学的时候还有去分析过shared_ptr与weak_ptr的用法，但终归并没有实际去使用这两个推动">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="弱回调">
+<meta property="og:url" content="http://yoursite.c/2019/08/11/弱回调/index.html">
+<meta property="og:site_name" content="Neo刷水题的地方">
+<meta property="og:description" content="弱回调技术 最近在拜读陈硕老师的《Linux多线程服务器端编程》，从第一章开始就觉得自己菜 = =，因为书中涉及的知识是我之前仅仅了解了皮毛，甚至是仅有耳闻的内容。所以这本书读起来很吃力，而且需要反复的去品味其中运用的技术。  从第一章来看，主要讲的shared_ptr与weak_ptr的运用，其实大学的时候还有去分析过shared_ptr与weak_ptr的用法，但终归并没有实际去使用这两个推动">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-11T10:55:25.998Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="弱回调">
+<meta name="twitter:description" content="弱回调技术 最近在拜读陈硕老师的《Linux多线程服务器端编程》，从第一章开始就觉得自己菜 = =，因为书中涉及的知识是我之前仅仅了解了皮毛，甚至是仅有耳闻的内容。所以这本书读起来很吃力，而且需要反复的去品味其中运用的技术。  从第一章来看，主要讲的shared_ptr与weak_ptr的运用，其实大学的时候还有去分析过shared_ptr与weak_ptr的用法，但终归并没有实际去使用这两个推动">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.c/2019/08/11/弱回调/">
+
+
+
+
+
+  <title>弱回调 | Neo刷水题的地方</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Neo刷水题的地方</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/08/11/弱回调/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Neo">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Neo刷水题的地方">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">弱回调</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-11T18:55:02+08:00">
+                2019-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="弱回调技术"><a href="#弱回调技术" class="headerlink" title="弱回调技术"></a>弱回调技术</h1><blockquote>
+<p>最近在拜读陈硕老师的《Linux多线程服务器端编程》，从第一章开始就觉得自己菜 = =，因为书中涉及的知识是我之前仅仅了解了皮毛，甚至是仅有耳闻的内容。<br>所以这本书读起来很吃力，而且需要反复的去品味其中运用的技术。</p>
+</blockquote>
+<p>从第一章来看，主要讲的shared_ptr与weak_ptr的运用，其实大学的时候还有去分析过shared_ptr与weak_ptr的用法，但终归并没有实际去使用这两个推动了C++现代化的工具。</p>
+<h2 id="shared-ptr-与-weak-ptr简介"><a href="#shared-ptr-与-weak-ptr简介" class="headerlink" title="shared_ptr 与 weak_ptr简介"></a>shared_ptr 与 weak_ptr简介</h2><p>这两个工具基本上可以说是配套使用的，举个🌰，shared_ptr最大的特点是引用计数，对同一个对象的多次引用，其实质只是在内部的计数器+1而已，但是如果遇到两个对象<br>相互引用，就会形成死锁。此时就需要weak_ptr来打破僵局，weak_ptr引用的对象，不会造成shared_ptr内部的计数器+1，可以理解为弱引用。但是本书中主要使用weak_ptr<br>的地方多在于试探，看当前的对象是否能从weak_ptr提升为shared_ptr,以此来保证对象并未被销毁。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>本书的代码其实是一点一点改进的，我就直接贴个最终版，然后一点一点分析好了=3=</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Created by neojxwang(王靖煊) on 2019-08-08.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">string</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stock</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    Stock() &#123;&#125;</span><br><span class="line">    Stock(<span class="built_in">string</span> key) : key_(key) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">key</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> key_;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> key_;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StockFactory</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">shared_ptr</span>&lt;Stock&gt; get(<span class="built_in">std</span>::<span class="built_in">string</span> key)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">shared_ptr</span>&lt;Stock&gt; sPtr;</span><br><span class="line"></span><br><span class="line">        pthread_mutex_lock(&amp;mutex_);</span><br><span class="line">        weak_ptr&lt;Stock&gt;&amp; wPtr = mp[key];</span><br><span class="line">        sPtr = wPtr.lock();</span><br><span class="line">        <span class="keyword">if</span> (!sPtr) &#123;</span><br><span class="line">            sPtr.reset(<span class="keyword">new</span> Stock(key), <span class="built_in">std</span>::bind(&amp;StockFactory::<span class="keyword">delete</span>, weak_ptr&lt;StockFactory&gt;(enable_shared_from_this()), _1));</span><br><span class="line">            wPtr = sPtr;</span><br><span class="line">        &#125;</span><br><span class="line">        pthread_mutex_unlock(&amp;mutex_);</span><br><span class="line">        <span class="keyword">return</span> sPtr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">pthread_mutex_t</span> mutex_;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="built_in">std</span>::weak_ptr&lt;Stock&gt;&gt; mp;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(weak_ptr&lt;Stock&gt; wPtr, Stock *stock)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">shared_ptr</span>&lt;StockFactory&gt; factory(wPtr.lock());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (factory)</span><br><span class="line">        &#123;</span><br><span class="line">            factory-&gt;removeStock(stock);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">delete</span> stock;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">removeStock</span><span class="params">(Stock * stock)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (stock)</span><br><span class="line">        &#123;</span><br><span class="line">            pthread_mutex_lock(&amp;mutex_);</span><br><span class="line">            mp.erase(stock-&gt;key());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>假设有各个股票，每个股票有一个唯一代码key，我们唯一要做的就是通过这个key来取到股票的对象，但是获得这个对象在多进程环境下其实是存在竞争的，假设如下情况，<br>进程A刚刚通过get()方法获得了对应的股票对象，进程B被推上CPU，并对那个股票对象进行了销毁操作，并切回进程A，那么此时，会出现coredump。</p>
+<p>所以我们最一开始的使用一个shared_ptr来存储map中的Stock对象，即<strong>std::map&lt;std::string, std::shared_ptr<stock>&gt;</stock></strong>但是这<br>样虽然可以方便对象的生命周期管理，但是此时的shared_ptr<strong>不会被销毁</strong>,所以我们该用weak_ptr来对map中的Stock进行管理，只有在真正<br>进行操作的时候，才将weak_ptr提升成shared_ptr。</p>
+<p>但是这个样子其实还是会使得内存进行泄漏的，那个map的size其实是只增不减的，因为并没有将map中的元素进行erase，即使这个元素没有被引用，使用的内存也不会减少，<br>这其实就是变相的内存泄露。所以我们使用shared_ptr的定制内存销毁函数，也就是使用std::bind()将shared_ptr的第二个元素绑定为一个函数，在这里bind了一个<br>类内部函数，所以使用std::bind(&amp;StockFactory::delete, this, _1)作为shared_ptr.reset()的第二个参数。</p>
+<blockquote>
+<p>bind 用法可以见上篇文章</p>
+</blockquote>
+<p>但是这个时候我们又出现了新的问题，我们将this指针作为参数传给了函数，这就很有可能造成多进程环境下的竞态，一旦这个类在进程A中被destroy，那么在另一个进程<br>中调用this指针就会造成coredump，所以我们还是使用shared_ptr指针来管理this指针，这就用到了enable_shared_from_this()方法，该方法可以返回get()<br>成员函数指向的类本身，且是一个shared_ptr函数，这就保证我们不会在这个类被销毁以后还能调用到this指针，更准确点，应该是我们会保证this被调用的时候，这个类<br>的实例一定不会被销毁。</p>
+<p>解决了this指针的问题，我们会发现，此时bind中绑定的StockFactory类实例的生命周期被延长了，我们此时可以通过<strong>弱回调技术</strong>来解决这个问题。</p>
+<blockquote>
+<p>所谓弱回调，顾名思义，我们对一个类实例的调用不会影响其本身的生命周期，只在需要的时候保证该类没有被销毁就可以。（我自己瞎说的</p>
+</blockquote>
+<p>最终版本的code就在上面。我们可以看到，这个enable_shared_from_this()方法产生的shared_ptr指针其实被放在了一个weak_ptr指针中，这就保证this指针<br>的类实例<strong>一定</strong>不会被意外的延长生命周期，而且在需要对this指针进行操作时，我们可以通过对weak_ptr指针的lock()操作来确保类实例是存在的，<br>这就是弱回调技术。</p>
+<ul>
+<li>总结一下，运用的技术主要是通过weak_ptr来对对象进行弱引用，以保证不意外延长对象的生命周期，并在需要对象的时候通过lock()来提升级别，以保证在多进程环境中对象实例还活着（XD</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/09/Leetcode-567-PermutationStrings/" rel="next" title="Leetcode-567-PermutationStrings">
+                <i class="fa fa-chevron-left"></i> Leetcode-567-PermutationStrings
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Neo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#弱回调技术"><span class="nav-number">1.</span> <span class="nav-text">弱回调技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#shared-ptr-与-weak-ptr简介"><span class="nav-number">1.1.</span> <span class="nav-text">shared_ptr 与 weak_ptr简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例"><span class="nav-number">1.2.</span> <span class="nav-text">实例</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-test"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Neo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
