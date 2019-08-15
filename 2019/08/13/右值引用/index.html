@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C++,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="很久之前看的左值与右值引用这类的东西，但是现在已经记不清楚概念，所以重新写篇博客来记录整理一下。   左值与右值左值与右值在C语言中就有出现，“lvalue”与“rvalue”，字面上l和r为left和right，其实我更愿意把它们理解location与read，一个是在内存中有明确的地址，有一个属于自己的”名分”，另一个则是只能被read （literally）， 所以两个的区别其实已经一目了">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="右值引用">
+<meta property="og:url" content="http://yoursite.c/2019/08/13/右值引用/index.html">
+<meta property="og:site_name" content="Neo刷水题的地方">
+<meta property="og:description" content="很久之前看的左值与右值引用这类的东西，但是现在已经记不清楚概念，所以重新写篇博客来记录整理一下。   左值与右值左值与右值在C语言中就有出现，“lvalue”与“rvalue”，字面上l和r为left和right，其实我更愿意把它们理解location与read，一个是在内存中有明确的地址，有一个属于自己的”名分”，另一个则是只能被read （literally）， 所以两个的区别其实已经一目了">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-15T05:30:44.113Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="右值引用">
+<meta name="twitter:description" content="很久之前看的左值与右值引用这类的东西，但是现在已经记不清楚概念，所以重新写篇博客来记录整理一下。   左值与右值左值与右值在C语言中就有出现，“lvalue”与“rvalue”，字面上l和r为left和right，其实我更愿意把它们理解location与read，一个是在内存中有明确的地址，有一个属于自己的”名分”，另一个则是只能被read （literally）， 所以两个的区别其实已经一目了">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.c/2019/08/13/右值引用/">
+
+
+
+
+
+  <title>右值引用 | Neo刷水题的地方</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Neo刷水题的地方</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/08/13/右值引用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Neo">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Neo刷水题的地方">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">右值引用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-13T21:21:12+08:00">
+                2019-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>很久之前看的左值与右值引用这类的东西，但是现在已经记不清楚概念，所以重新写篇博客来记录整理一下。</p>
+</blockquote>
+<hr>
+<h1 id="左值与右值"><a href="#左值与右值" class="headerlink" title="左值与右值"></a>左值与右值</h1><p>左值与右值在C语言中就有出现，<strong>“lvalue”</strong>与<strong>“rvalue”</strong>，字面上l和r为left和right，其实我更愿意把它们理解location与read，一个是在内存中有明确的地址，有一个属于自己的”名分”，另一个则是只能被read （literally）， 所以两个的区别其实已经一目了然。在代码中表现出来则是这个样子。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>; <span class="comment">// i 是左值，在栈上有地址，0是右值</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dummy</span><span class="params">(<span class="number">20</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mummy</span><span class="params">(<span class="number">30</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> foo = dummy;  	<span class="comment">//foo是左值</span></span><br><span class="line">foo = dummy * mummy; <span class="comment">// dummy * mummy是右值</span></span><br></pre></td></tr></table></figure>
+
+<p>在判断一个值是左值还是右值时，我们只需要考虑，这个值是否<strong>真实存在</strong>。如果作为一个函数的返回值，这个值在内存中其实并不存在，所以是右值。</p>
+<h1 id="左值引用与右值引用"><a href="#左值引用与右值引用" class="headerlink" title="左值引用与右值引用"></a>左值引用与右值引用</h1><p>这两个也很好理解，顾名思义，左值引用就是对左值的引用，用&amp;表示，右值引用则是对右值的引用，通过&amp;&amp;来表示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> foo = <span class="number">50</span>;</span><br><span class="line"><span class="keyword">int</span> app = <span class="number">60</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> &amp;dummy = foo; <span class="comment">// dummy是左值引用</span></span><br><span class="line"><span class="keyword">int</span> &amp;&amp;rdummy = <span class="number">30</span>; <span class="comment">// 30是右值 rdummy是右值引用</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;ra = a; <span class="comment">// const 左值引用</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;&amp;rra = <span class="number">30</span>; <span class="comment">// const 右值引用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 一种特殊情况 </span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;ra = <span class="number">30</span>;  <span class="comment">// const 左值引用绑定在一个右值上，因为这个值不能修改。</span></span><br></pre></td></tr></table></figure>
+
+<p>右值引用只能绑定在右值上，所以资源要么是立刻被销毁，或者只是一个字面常量，这就意味着对右值进行引用后可以接管这个右值的所有并随意修改，而不用担心会造成什么奇怪的影响。可以说是一个很方便的特性了。</p>
+<h1 id="引用的值类型与引用叠加"><a href="#引用的值类型与引用叠加" class="headerlink" title="引用的值类型与引用叠加"></a>引用的值类型与引用叠加</h1><h2 id="值类型"><a href="#值类型" class="headerlink" title="值类型"></a>值类型</h2><p>我们先来看左值引用与右值引用本身是左值还是右值呢？</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="number">40</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> &amp;lfoo = foo;</span><br><span class="line"><span class="keyword">int</span> &amp;dummy = lfoo;  	<span class="comment">//将一个左值引用作为右值赋值给dummy</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> &amp;du = ++foo;  	<span class="comment">//将前置自增的++返回的左值作为右值赋值给du</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到，左值或者左值引用都可以作为右值赋值给别的变量，更仔细的说，一个左值，作为一个变量被保存下来，那么它就是一个左值，如果只是被当成一个右值用来赋值，那么生命周期与一个右值一样短暂。</p>
+<p>同样的，一个右值被返回后被存储在一个变量中，那就应该被当成一个左值来对待，否则就是一个右值。</p>
+<h2 id="引用叠加"><a href="#引用叠加" class="headerlink" title="引用叠加"></a>引用叠加</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span>&amp; intR;</span><br><span class="line"><span class="keyword">typedef</span> intR&amp; intRR;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">dummy</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">	intR i = dummy;  </span><br><span class="line">	intRR rri = i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里面，intR其实是一个int &amp;, 但是intRR 其实应该是int&amp; &amp;,表示的是对一个int类型引用的引用，这个其实就是C++的引用叠加，有如下规则。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Type&amp; &amp; = Type&amp;;</span><br><span class="line">Type&amp; &amp;&amp; = Type&amp;;</span><br><span class="line">Type&amp;&amp; &amp; = Type&amp;;</span><br><span class="line">Type&amp;&amp; &amp;&amp; = Type&amp;&amp;;</span><br></pre></td></tr></table></figure>
+
+<p>这就是C++引用的叠加。有点像0与1求&amp;，只要有左值引用那么最后叠加以后一定会是一个左值。</p>
+<h1 id="右值引用使用场景"><a href="#右值引用使用场景" class="headerlink" title="右值引用使用场景"></a>右值引用使用场景</h1><p>所谓的右值引用可以应用在什么地方呢？</p>
+<h2 id="move语义"><a href="#move语义" class="headerlink" title="move语义"></a>move语义</h2><p>先来看一段代码。    </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dummy</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">string</span> Inner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Dummy() : inner_(<span class="keyword">new</span> Inner(<span class="string">"test"</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Trivial Constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">Dummy</span><span class="params">(<span class="keyword">const</span> Inner&amp; inner)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        inner_ = <span class="keyword">new</span> Inner(inner);</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"explicit Constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~Dummy() &#123;</span><br><span class="line">        <span class="keyword">delete</span>(inner_);</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Destructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Dummy(<span class="keyword">const</span> Dummy&amp; dummy)</span><br><span class="line">    &#123;</span><br><span class="line">        inner_ = <span class="keyword">new</span> Inner(*(dummy.inner_));</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"copy Constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Dummy&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Dummy&amp; dummy)</span><br><span class="line">    &#123;</span><br><span class="line">        inner_ = <span class="keyword">new</span> Inner(*(dummy.inner_));</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"operator = "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Inner *inner_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Dummy <span class="title">get</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">Dummy <span class="title">dummy</span><span class="params">(<span class="string">"test"</span>)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> dummy;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Dummy dummy1;</span><br><span class="line">    dummy1 = get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是实际应用的时候会发现，简单的几段代码调用的函数分别有：</p>
+<blockquote>
+<p>Trivial Constructor<br>explicit Constructor<br>operator =<br>Destructor<br>Destructor</p>
+</blockquote>
+<p>本次的调用过程分别有：首先调用Trivial Constructor，对dummy1进行construct，然后进入到get(),调用explicit Constructor对get()中的dummy进行consturct。返回一个dummy后，通过operator=()重载的=预算符赋值给dummy1，代码执行完以后，分别为dummy和dummy1调用destructor。</p>
+<p>在operatro=中，我们是把dummy中的指针取出来然后重新构造，需要重新调用new和Inner的delete，而且我们还可以注意到，get()返回的是一个右值，我们完全可以为operator=和copy constructor重新定制一个右值版本，分别称为move assignment和move constructor.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dummy</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">string</span> Inner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Dummy() : inner_(<span class="keyword">new</span> Inner(<span class="string">"test"</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Trivial Constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">Dummy</span><span class="params">(<span class="keyword">const</span> Inner&amp; inner)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        inner_ = <span class="keyword">new</span> Inner(inner);</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"explicit Constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~Dummy() &#123;</span><br><span class="line">        <span class="keyword">delete</span>(inner_);</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Destructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Dummy(<span class="keyword">const</span> Dummy&amp; dummy)</span><br><span class="line">    &#123;</span><br><span class="line">        inner_ = <span class="keyword">new</span> Inner(*(dummy.inner_));</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"copy Constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Dummy&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Dummy&amp; dummy)</span><br><span class="line">    &#123;</span><br><span class="line">        inner_ = <span class="keyword">new</span> Inner(*(dummy.inner_));</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"operator = "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Dummy(Dummy&amp;&amp; dummy) : inner_(dummy.inner_)</span><br><span class="line">    &#123;</span><br><span class="line">        dummy.inner_ = <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"move Construct "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Dummy&amp; <span class="keyword">operator</span>=(Dummy&amp;&amp; dummy)</span><br><span class="line">    &#123;</span><br><span class="line">        Inner *tmp = dummy.inner_;</span><br><span class="line">        dummy.inner_ = inner_;</span><br><span class="line">        inner_ = tmp;</span><br><span class="line">        tmp = <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"move assignment"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Inner *inner_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Dummy <span class="title">get</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">Dummy <span class="title">dummy</span><span class="params">(<span class="string">"test"</span>)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> dummy;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Dummy dummy1;</span><br><span class="line">    dummy1 = get();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的运行结果如下：</p>
+<blockquote>
+<p>Trivial Constructor<br>explicit Constructor<br>move assignment<br>Destructor<br>Destructor</p>
+</blockquote>
+<p>通过move assignment，我们可以将原来的copy assignment中的一次new &amp; delete给消除掉来提升性能。</p>
+<p>本质上来说，我们做了一次浅拷贝来节省性能，而dummy变成了一个dangling pointer, 所以给它赋值为nullptr.</p>
+<h2 id="完美转发-perfect-farward"><a href="#完美转发-perfect-farward" class="headerlink" title="完美转发(perfect farward)"></a>完美转发(perfect farward)</h2><p>假如说我们有很多种类型的class，而且有的可能会是左值有的会是右值，我们需要通过一个函数来进行转发。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(T t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  	<span class="built_in">cout</span> &lt;&lt; <span class="string">"in func"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">forward</span><span class="params">(T&amp;&amp; t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  	<span class="built_in">cout</span> &lt;&lt; <span class="string">"in forward "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		func(t);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  	relay(get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是得到的结果却和我们想象的完全不一样，得到的结果如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explicit</span> Constructor</span><br><span class="line">in forward</span><br><span class="line">copy Constructor</span><br><span class="line">in func</span><br><span class="line">Destructor</span><br><span class="line">Destructor</span><br></pre></td></tr></table></figure>
+
+<p>通过结果我们可以看出，在调用func的时候，我们以get()返回的右值传进去，按照引用叠加的原理来说，应该给func的也是一个右值，但是实际上根据调用的结果来看，传进去的t是以左值引用的方式过去的，而不是以右值引用的move Constructor版本。具体的原因是因为我们传给func的值其实已经被确确实实的存储在了内存中，所以最后给func()的应该是一个左值引用，通过和&amp;&amp;引用叠加一个真正得到了一个左值引用，所以调用了copy Constructor.</p>
+<p>那我们如果想要完成的以它本身的状态来传递的话，就应该以forward<t>()来进行<strong>完美转发</strong>,从而保持T本身的状态，代码如下。</t></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(T t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  	<span class="built_in">cout</span> &lt;&lt; <span class="string">"in func"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">forward</span><span class="params">(T&amp;&amp; t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  	<span class="built_in">cout</span> &lt;&lt; <span class="string">"in forward "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		func(<span class="built_in">std</span>::forward&lt;T&gt;(t));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  	relay(get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样得到的结果是：</p>
+<blockquote>
+<p>explicit Constructor<br>in forward<br>move Construct<br>in func<br>Destructor<br>Destructor</p>
+</blockquote>
+<p>我们可以看到，此时传进func的结果被完整的保留了右值的身份。通过完美转发来达到我们需要的效果。如果我们把输入forward的类型改为左值:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  	Dummy du = get();</span><br><span class="line">  	forward(du);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过这个输入得到的结果是：</p>
+<blockquote>
+<p>Trivial Constructor<br>in forward<br>copy Constructor<br>in func<br>Destructor<br>Destructor</p>
+</blockquote>
+<p>完美的得到了我们需要的结果。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/11/弱回调/" rel="next" title="弱回调">
+                <i class="fa fa-chevron-left"></i> 弱回调
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Neo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#左值与右值"><span class="nav-number">1.</span> <span class="nav-text">左值与右值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#左值引用与右值引用"><span class="nav-number">2.</span> <span class="nav-text">左值引用与右值引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引用的值类型与引用叠加"><span class="nav-number">3.</span> <span class="nav-text">引用的值类型与引用叠加</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#值类型"><span class="nav-number">3.1.</span> <span class="nav-text">值类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用叠加"><span class="nav-number">3.2.</span> <span class="nav-text">引用叠加</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#右值引用使用场景"><span class="nav-number">4.</span> <span class="nav-text">右值引用使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#move语义"><span class="nav-number">4.1.</span> <span class="nav-text">move语义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完美转发-perfect-farward"><span class="nav-number">4.2.</span> <span class="nav-text">完美转发(perfect farward)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-test"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Neo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
