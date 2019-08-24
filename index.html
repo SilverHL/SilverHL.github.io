@@ -249,6 +249,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/08/24/SlideWindow模板/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Neo">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Neo刷水题的地方">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/24/SlideWindow模板/" itemprop="url">SlideWindow模板</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-24T14:08:50+08:00">
+                2019-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Slide-Window模板"><a href="#Slide-Window模板" class="headerlink" title="Slide Window模板"></a>Slide Window模板</h1><p>SlideWindow类型的题刷了很多了，总结一个模板出来</p>
+<p>首先，用两个指针l,r表示左右边界，l = 0, r = 0。通过这个l r来表示一个<strong>左开右闭区间</strong>, 即[l, r)。</p>
+<p>然后在一个循环中遍历整个数组，终结条件为 r == array.size(), 每次循环做的第一件事是, sum += array[r++],然后对sum的值进行判断，如果没有达到需要的condition就continue，否则进行判断，但是这边一个容易被忽略过去的地方，即l到r的范围中，如果r-1位目标值，其中，[l,r-1]区间中有可能还有我们需要的结果，所以我们再来将[l,r-1]区间中的值进行遍历。（这步可以理解为，以数组中每一个值作为subarray的最后一个值，判断当前subarray是否符合需求)</p>
+<p>最后一个容易忽略的地方，当循环结束后，我们仍有[l,r-1]区间的值未遍历，其中有可能出现我们需要的结果,所以最后一个扫尾，把这段值处理下就可以了。</p>
+<h2 id="code"><a href="#code" class="headerlink" title="code"></a>code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">SlideWindow</span><span class="params">(<span class="built_in">vector</span>&lt;T&gt;&amp; <span class="built_in">array</span>, T target)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">array</span>.size() == <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">int</span> l = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">int</span> r = <span class="number">0</span>;</span><br><span class="line"> 	<span class="keyword">int</span> sum = <span class="built_in">array</span>[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//左开右闭区间，求长度可直接通过 r - l 得到</span></span><br><span class="line">  <span class="keyword">while</span> (r &lt; <span class="built_in">array</span>.size())</span><br><span class="line">  &#123;</span><br><span class="line">    sum += <span class="built_in">array</span>[r++];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (sum &lt; target)</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (sum == target)</span><br><span class="line">    	ans++;</span><br><span class="line">   	<span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">while</span> (sum &gt; target &amp;&amp; l &lt; r)</span><br><span class="line">      &#123;</span><br><span class="line">        sum -= <span class="built_in">array</span>[l++];</span><br><span class="line">        <span class="keyword">if</span> (sum == target)</span><br><span class="line">          ans++;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 扫尾</span></span><br><span class="line">  <span class="keyword">while</span> (sum &gt; target &amp;&amp; l &lt; r)</span><br><span class="line">  &#123;</span><br><span class="line">    sum -= <span class="built_in">array</span>[l++];</span><br><span class="line">    <span class="keyword">if</span> (sum == target)</span><br><span class="line">			ans++;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/08/18/Leetcode-234-PalindromeLinkedList/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1303,7 +1450,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/07/22/LeetCode-42-TrappingRainWaters/" itemprop="url">LeetCode-42-TrappingRainWaters</a></h1>
+                <a class="post-title-link" href="/2019/07/22/LeetCode-42-TrappingRainWaters/" itemprop="url">Leetcode-42-TrappingRainWaters</a></h1>
         
 
         <div class="post-meta">
@@ -1355,7 +1502,7 @@
       
         
           
-            <h1 id="LeetCode-42-Trapping-Rain-Waters"><a href="#LeetCode-42-Trapping-Rain-Waters" class="headerlink" title="LeetCode 42 Trapping Rain Waters"></a>LeetCode 42 Trapping Rain Waters</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
+            <h1 id="Leetcode-42-Trapping-Rain-Waters"><a href="#Leetcode-42-Trapping-Rain-Waters" class="headerlink" title="Leetcode 42 Trapping Rain Waters"></a>Leetcode 42 Trapping Rain Waters</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
 <p>Given n non-negative integers representing an elevation map where the width of each bar is 1,<br>compute how much water it is able to trap after raining.</p>
 </blockquote>
 <p><img src="https://assets.leetcode.com/uploads/2018/10/22/rainwatertrap.png" alt="test"></p>
@@ -1539,135 +1686,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/07/21/Mutable关键字/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Neo">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Neo刷水题的地方">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/21/Mutable关键字/" itemprop="url">Mutable关键字</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-21T16:39:58+08:00">
-                2019-07-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="关于C-的mutable关键字"><a href="#关于C-的mutable关键字" class="headerlink" title="关于C++的mutable关键字"></a>关于C++的mutable关键字</h1><p>C++的mutable关键字今天整理一下。</p>
-<p>C++的const概念为 不可以修改，const可用来修饰变量，指针，引用，类成员函数等，当const被用来修饰<br>成员函数的时候，代表该成员函数不可以修改类内部的成员变量。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">dummy</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getX</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// x = 10  compplie error</span></span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>getX作为const成员函数，强行修改会造成编译错误.<br>但是通过mutable关键字，我们可以对mutable修饰的成员变量进行修改。</p>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">dummy_mutable</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">get</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span> key)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (key == last_key) </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> last_value;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">string</span> value = &#123;<span class="keyword">this</span>-&gt;lookup(last_key)&#125;;</span><br><span class="line"></span><br><span class="line">        last_key_ = key;</span><br><span class="line">        last_value_ = value;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">mutable</span> <span class="built_in">std</span>::<span class="built_in">string</span> last_key_;</span><br><span class="line">    <span class="keyword">mutable</span> <span class="built_in">std</span>::<span class="built_in">string</span> last_value_;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在这个例子中我们可以看到，我们在const成员函数get()中修改了last_key_以及last_value_<br>的值，这就是mutable的作用。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1718,7 +1736,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
