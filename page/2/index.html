@@ -249,6 +249,274 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/07/22/LeetCode-42-TrappingRainWaters/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Neo">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Neo刷水题的地方">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/22/LeetCode-42-TrappingRainWaters/" itemprop="url">Leetcode-42-TrappingRainWaters</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-22T23:12:26+08:00">
+                2019-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Leetcode-42-Trapping-Rain-Waters"><a href="#Leetcode-42-Trapping-Rain-Waters" class="headerlink" title="Leetcode 42 Trapping Rain Waters"></a>Leetcode 42 Trapping Rain Waters</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
+<p>Given n non-negative integers representing an elevation map where the width of each bar is 1,<br>compute how much water it is able to trap after raining.</p>
+</blockquote>
+<p><img src="https://assets.leetcode.com/uploads/2018/10/22/rainwatertrap.png" alt="test"></p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这个题其实很有意思，一开始刷的时候，感觉无从下手，但是第二次刷就好很多，起码有个大概思路，用了<br>两种思路来解这道题。</p>
+<ul>
+<li>Two Pointers</li>
+<li>MonoStack</li>
+</ul>
+<h3 id="Two-Pointers"><a href="#Two-Pointers" class="headerlink" title="Two Pointers"></a>Two Pointers</h3><p>我们可以先理清楚最基本的问题，能Trap住雨水的，一定是有凹槽存在，而这个凹槽能容纳多少水，一定是<br>以它两端中最低的这端作为Base，除此之外，应该是两端各取最大值，以达到容纳最多水的效果。举个🌰。</p>
+<p><em>Lmax L R Rmax</em></p>
+<p>此时，如果LMax &lt; Rmax,  我们可以计算L点的水量，因为此时，我们以LMax为短板，那么一定有Rmax &gt; LMax<br>所以我们可以将L处的水量，即Lmax - L 加入到水量中，反之，则加入RMax - R。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> right = height.size()<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> leftMax = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> rightMax = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (left &lt; right)</span><br><span class="line">    &#123;</span><br><span class="line">        leftMax = max(height[left], leftMax);</span><br><span class="line">        rightMax = max(height[right], rightMax);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (leftMax &gt; rightMax) &#123;</span><br><span class="line">            res += rightMax - height[right];</span><br><span class="line">            right--;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res += leftMax - height[left];</span><br><span class="line">            left++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="MonoStack"><a href="#MonoStack" class="headerlink" title="MonoStack"></a>MonoStack</h3><p>这个解法其实也很有意思，单调栈，顾名思义，就是栈内的元素都保持单调递增或递减，因为我们的目的是<br>计算容纳的水，那么就要制造高低差。我们使栈内的元素单调递减，考虑一种极限情况，1-4都为单调递减，<br>第5个值 &gt; 第一个值，此时，因为第五个值大于栈顶元素，所以我们将栈顶弹出，并将栈作为一个坑，此时，<br>坑的高度应该为当前栈（即弹出栈顶后的栈）的栈顶与第五个值的min（显然为栈顶）与坑的高度做差，得到<br>此时坑的高度，坑的宽度应该为5 - 3 - 1，也就是第五个元素的index与栈顶的index相减，因宽度为1，故<br>再次减一，相乘即为结果。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap1</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; stk;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> sz = height.size();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (i &lt; sz)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (stk.empty() || height[stk.top()] &gt;= height[i])</span><br><span class="line">            stk.push(i++);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> cur  = height[stk.top()];</span><br><span class="line">            stk.pop();</span><br><span class="line">            <span class="keyword">int</span> len = i - stk.top() - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">int</span> h = min(stk.top(), height[i]);</span><br><span class="line">            res += (h - cur) * len;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>其实Two Pointer与MonoStack有相似指出，只不过Two Pointers计算的是纵向的水量，MonoStack计算的是<br>横向的水量。反正这个题，应该算是吃透了8. 快乐。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/07/22/LeetCode-881-BoatsToSavePeople/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Neo">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Neo刷水题的地方">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/22/LeetCode-881-BoatsToSavePeople/" itemprop="url">881_BoatsToSavePeople</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-22T12:48:59+08:00">
+                2019-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="LeetCode-881-Boats-To-Save-People"><a href="#LeetCode-881-Boats-To-Save-People" class="headerlink" title="LeetCode 881 Boats To Save People"></a>LeetCode 881 Boats To Save People</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
+<p>The i-th person has weight people[i], and each boat can carry a maximum weight of limit.</p>
+</blockquote>
+<blockquote>
+<p>Each boat carries at most 2 people at the same time, provided the sum of the weight of those<br>people is at most limit.</p>
+</blockquote>
+<blockquote>
+<p>Return the minimum number of boats to carry every given person.  (It is guaranteed each person<br>can be carried by a boat.)</p>
+</blockquote>
+<p>这个还蛮简单的，完全可以类比成，2 Sum，取最接近的值，没啥好说的，直接上代码了。</p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">numRescueBoats</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; people, <span class="keyword">int</span> limit)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sort(begin(people), end(people));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> beg = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> end = people.size()<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (beg &lt;= end)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (people[beg] + people[end] &gt; limit)</span><br><span class="line">        &#123;</span><br><span class="line">            end--;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            beg++;</span><br><span class="line">            end--;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/07/21/Mutable关键字/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -714,7 +982,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

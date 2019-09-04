@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="C++,">
+  <meta name="keywords" content="C++,Leetcode,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="C++ std::bind很久之前学习过bind，但是现在已经记不清楚了…重新学一哈。 C++中应该有Lvalue，Rvalue，但是其实一共有五种来着… bind的主要作用应该是将方法与参数相绑定。 其可以绑定两种方法，一种是普通的方法，一种是类的成员方法。 123456789101112131415161718192021222324252627282930313233343536373839">
-<meta name="keywords" content="C++">
+<meta name="description" content="Leetcode 1122 Relative Sort Array 这个题虽然是easy级别的题目，但是这个解法挺高明的，而且在Leetcode上时间和空间都超过了100%的提交，特此记录下。 题目 Given two arrays arr1 and arr2, the elements of arr2 are distinct, and all elements in arr2 are also">
+<meta name="keywords" content="C++,Leetcode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bind">
-<meta property="og:url" content="http://yoursite.c/2019/07/24/bind/index.html">
+<meta property="og:title" content="Leetcode-1122-RelativeSortArray">
+<meta property="og:url" content="http://yoursite.c/2019/09/04/Leetcode-1122-RelativeSortArray/index.html">
 <meta property="og:site_name" content="Neo刷水题的地方">
-<meta property="og:description" content="C++ std::bind很久之前学习过bind，但是现在已经记不清楚了…重新学一哈。 C++中应该有Lvalue，Rvalue，但是其实一共有五种来着… bind的主要作用应该是将方法与参数相绑定。 其可以绑定两种方法，一种是普通的方法，一种是类的成员方法。 123456789101112131415161718192021222324252627282930313233343536373839">
+<meta property="og:description" content="Leetcode 1122 Relative Sort Array 这个题虽然是easy级别的题目，但是这个解法挺高明的，而且在Leetcode上时间和空间都超过了100%的提交，特此记录下。 题目 Given two arrays arr1 and arr2, the elements of arr2 are distinct, and all elements in arr2 are also">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-24T14:29:06.275Z">
+<meta property="og:updated_time" content="2019-09-04T12:53:39.673Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="bind">
-<meta name="twitter:description" content="C++ std::bind很久之前学习过bind，但是现在已经记不清楚了…重新学一哈。 C++中应该有Lvalue，Rvalue，但是其实一共有五种来着… bind的主要作用应该是将方法与参数相绑定。 其可以绑定两种方法，一种是普通的方法，一种是类的成员方法。 123456789101112131415161718192021222324252627282930313233343536373839">
+<meta name="twitter:title" content="Leetcode-1122-RelativeSortArray">
+<meta name="twitter:description" content="Leetcode 1122 Relative Sort Array 这个题虽然是easy级别的题目，但是这个解法挺高明的，而且在Leetcode上时间和空间都超过了100%的提交，特此记录下。 题目 Given two arrays arr1 and arr2, the elements of arr2 are distinct, and all elements in arr2 are also">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.c/2019/07/24/bind/">
+  <link rel="canonical" href="http://yoursite.c/2019/09/04/Leetcode-1122-RelativeSortArray/">
 
 
 
 
 
-  <title>bind | Neo刷水题的地方</title>
+  <title>Leetcode-1122-RelativeSortArray | Neo刷水题的地方</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/07/24/bind/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.c/2019/09/04/Leetcode-1122-RelativeSortArray/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Neo">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">bind</h1>
+          <h1 class="post-title" itemprop="name headline">Leetcode-1122-RelativeSortArray</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-24T21:42:06+08:00">
-                2019-07-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-04T20:40:32+08:00">
+                2019-09-04
               </time>
             
 
@@ -320,12 +320,21 @@
       
 
       
-        <h1 id="C-std-bind"><a href="#C-std-bind" class="headerlink" title="C++ std::bind"></a>C++ std::bind</h1><p>很久之前学习过bind，但是现在已经记不清楚了…重新学一哈。</p>
-<p>C++中应该有Lvalue，Rvalue，但是其实一共有五种来着…</p>
-<p>bind的主要作用应该是将方法与参数相绑定。</p>
-<p>其可以绑定两种方法，一种是普通的方法，一种是类的成员方法。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">changeAB</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        a_ = a;</span><br><span class="line">        b_ = b;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> a_;</span><br><span class="line">    <span class="keyword">int</span> b_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span> &amp;a, <span class="keyword">int</span> &amp;b, <span class="keyword">const</span> <span class="keyword">int</span> &amp;c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//此处打印结果是 a = 1</span></span><br><span class="line">    <span class="comment">//在bind时就已经确定了各个参数的类型，不会因为方法本身改变</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"in"</span> &lt;&lt; a &lt;&lt; <span class="string">" "</span> &lt;&lt; b &lt;&lt; <span class="string">" "</span> &lt;&lt; c &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    ++a;</span><br><span class="line">    ++b; <span class="comment">//此处修改main中b的值</span></span><br><span class="line">    <span class="comment">// ++c; compile error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>::placeholders; <span class="comment">// 使用占位符</span></span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>, b = <span class="number">2</span>, c = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//绑定test方法</span></span><br><span class="line">    <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>()&gt; bound_test = <span class="built_in">std</span>::bind(test, a, <span class="built_in">std</span>::ref(b), <span class="built_in">std</span>::cref(c));</span><br><span class="line">    a = <span class="number">10</span>;</span><br><span class="line">    b = <span class="number">12</span>;</span><br><span class="line">    c = <span class="number">13</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a  &lt;&lt; <span class="string">"  "</span> &lt;&lt; b &lt;&lt; <span class="string">" "</span> &lt;&lt; c &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    bound_test();</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a  &lt;&lt; <span class="string">"  "</span> &lt;&lt; b &lt;&lt; <span class="string">" "</span> &lt;&lt; c &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//bind 类成员方法：</span></span><br><span class="line">    <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>()&gt; bound_changeAB(&amp;Test::changeAB, _1, _2);</span><br><span class="line">    bound_changeAB(a, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>Leetcode 1122 Relative Sort Array</p>
+<p>这个题虽然是easy级别的题目，但是这个解法挺高明的，而且在Leetcode上时间和空间都超过了100%的提交，特此记录下。</p>
+<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><blockquote>
+<p>Given two arrays <code>arr1</code> and <code>arr2</code>, the elements of <code>arr2</code> are distinct, and all elements in <code>arr2</code> are also in <code>arr1</code>.</p>
+<p>Sort the elements of <code>arr1</code> such that the relative ordering of items in <code>arr1</code> are the same as in <code>arr2</code>.  Elements that don’t appear in <code>arr2</code> should be placed at the end of <code>arr1</code> in <strong>ascending</strong> order.</p>
+</blockquote>
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><p>给定两个数组arr1以及arr2，其中arr2的数字是distinct的，数字1的会有重复，需要我们将arr1中的数字sort成arr2中的顺序，而且对于arr2中不存在的数字，需要将其按升序排列。</p>
+<p>举个🌰：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: arr1 = [2,3,1,3,2,4,6,7,9,2,19], arr2 = [2,1,4,3,9,6]</span><br><span class="line">Output: [2,2,2,1,4,3,3,9,6,7,19]</span><br></pre></td></tr></table></figure>
 
+<p>本题中的解法使用的是：通过一个自定义sort()函数的第三个参数，即一个function/functor，来对arr1进行sort，因为arr2中的变量是不会重复的，我们将arr2中的变量的index作为排序的依据。即：对于arr1以及arr2中存在的数字，排序的依据是arr2中变量的index，对于arr1中存在，arr2中不存在的数字，我们根据其本身大小进行排序。如果arr1中两个数字，第一个在arr2中存在，第二个不存在，那么第一个应该排在第二个前面，否则就是后面。直接上代码了。</p>
+<h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; relativeSortArray(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; arr1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; arr2)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> i : arr2)</span><br><span class="line">        <span class="keyword">if</span> (i &gt; max)</span><br><span class="line">            max = i;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; order(max+<span class="number">1</span>, <span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> n = arr2.size();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        order[arr2[i]] = i;</span><br><span class="line"></span><br><span class="line">    n = (<span class="keyword">int</span>)order.size();</span><br><span class="line">    <span class="keyword">auto</span> cmp = [&amp;order, &amp;n](<span class="keyword">const</span> <span class="keyword">int</span> a, <span class="keyword">const</span> <span class="keyword">int</span> b) -&gt; <span class="keyword">bool</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">bool</span> contain_a = <span class="literal">false</span>, contain_b = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (a &lt; n &amp;&amp; order[a] != <span class="number">-1</span>)</span><br><span class="line">            contain_a = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (b &lt; n &amp;&amp; order[b] != <span class="number">-1</span>)</span><br><span class="line">            contain_b = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (contain_a &amp;&amp; contain_b)</span><br><span class="line">            <span class="keyword">return</span> order[a] &lt; order[b];</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (!contain_a &amp;&amp; !contain_b)</span><br><span class="line">            <span class="keyword">return</span> a &lt; b;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (contain_a)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    sort(arr1.begin(), arr1.end(), cmp);</span><br><span class="line">    <span class="keyword">return</span> arr1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>又水了一道题，快乐;D</p>
 
       
     </div>
@@ -345,6 +354,8 @@
           
             <a href="/tags/C/" rel="tag"># C++</a>
           
+            <a href="/tags/Leetcode/" rel="tag"># Leetcode</a>
+          
         </div>
       
 
@@ -356,8 +367,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/23/Weak-Ptr相关/" rel="next" title="Weak_Ptr相关">
-                <i class="fa fa-chevron-left"></i> Weak_Ptr相关
+              <a href="/2019/08/24/Leetcode-845-LongestMountainInArray/" rel="next" title="Leetcode-845-LongestMountainInArray">
+                <i class="fa fa-chevron-left"></i> Leetcode-845-LongestMountainInArray
               </a>
             
           </div>
@@ -365,10 +376,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/07/Leetcode-828-UniqueLetterString/" rel="prev" title="Leetcode-828-UniqueLetterString">
-                Leetcode-828-UniqueLetterString <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -500,7 +507,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C-std-bind"><span class="nav-number">1.</span> <span class="nav-text">C++ std::bind</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#题解"><span class="nav-number">2.</span> <span class="nav-text">题解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Code"><span class="nav-number">3.</span> <span class="nav-text">Code</span></a></li></ol></div>
             
 
           </div>
