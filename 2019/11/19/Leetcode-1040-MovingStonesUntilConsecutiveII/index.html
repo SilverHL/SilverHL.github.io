@@ -20,7 +20,7 @@
 	<link rel="preconnect" href="//9qpuwspm.api.lncld.net">
 	<link rel="preconnect" href="//gravatar.loli.net">
 
-	<title>弱回调 | Neo刷水题的地方</title>
+	<title>Leetcode-1040-MovingStonesUntilConsecutiveII | Neo刷水题的地方</title>
 
 	<meta name="HandheldFriendly" content="True">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -48,14 +48,14 @@
 
 	<meta property="og:site_name" content="Neo刷水题的地方">
 	<meta property="og:type" content="article">
-	<meta property="og:title" content="弱回调 | Neo刷水题的地方">
+	<meta property="og:title" content="Leetcode-1040-MovingStonesUntilConsecutiveII | Neo刷水题的地方">
 	<meta property="og:description" content>
-	<meta property="og:url" content="http://yoursite.c/2019/08/11/弱回调/">
+	<meta property="og:url" content="http://yoursite.c/2019/11/19/Leetcode-1040-MovingStonesUntilConsecutiveII/">
 
 	
-	<meta property="article:published_time" content="2019-08-11T18:08:00+08:00"> 
+	<meta property="article:published_time" content="2019-11-19T14:11:00+08:00"> 
 	<meta property="article:author" content="Neo">
-	<meta property="article:published_first" content="Neo刷水题的地方, /2019/08/11/弱回调/">
+	<meta property="article:published_first" content="Neo刷水题的地方, /2019/11/19/Leetcode-1040-MovingStonesUntilConsecutiveII/">
 	
 
 	
@@ -144,117 +144,68 @@
     <div class="inner">
         <header class="post-full-header">
             <div class="post-full-meta">
-                <time class="post-full-meta-date" datetime="2019-08-11T10:55:02.000Z">
-                    2019-08-11
+                <time class="post-full-meta-date" datetime="2019-11-19T06:55:38.000Z">
+                    2019-11-19
                 </time>
                 
                 <span class="date-divider">/</span>
                 
                 
             </div>
-            <h1 class="post-full-title">弱回调</h1>
+            <h1 class="post-full-title">Leetcode-1040-MovingStonesUntilConsecutiveII</h1>
         </header>
         <div class="post-full no-image">
             
             <div class="post-full-content">
                 <article id="photoswipe" class="markdown-body">
-                    <h1 id="弱回调技术"><a href="#弱回调技术" class="headerlink" title="弱回调技术"></a>弱回调技术</h1><blockquote>
-<p>最近在拜读陈硕老师的《Linux多线程服务器端编程》，从第一章开始就觉得自己菜 = =，因为书中涉及的知识是我之前仅仅了解了皮毛，甚至是仅有耳闻的内容。所以这本书读起来很吃力，而且需要反复的去品味其中运用的技术。</p>
-</blockquote>
-<p>从第一章来看，主要讲的shared_ptr与weak_ptr的运用，其实大学的时候还有去分析过shared_ptr与weak_ptr的用法，但终归并没有实际去使用这两个推动了C++现代化的工具。</p>
-<h2 id="shared-ptr-与-weak-ptr简介"><a href="#shared-ptr-与-weak-ptr简介" class="headerlink" title="shared_ptr 与 weak_ptr简介"></a>shared_ptr 与 weak_ptr简介</h2><p>这两个工具基本上可以说是配套使用的，举个🌰，shared_ptr最大的特点是引用计数，对同一个对象的多次引用，其实质只是在 内部的计数器+1而已，但是如果遇到两个对象相互引用，就会形成死锁。此时就需要weak_ptr来打破僵局，weak_ptr引用的 对象，不会造成shared_ptr内部的计数器+1，可以理解为弱引用。但是本书中主要使用weak_ptr的地方多在于试探，看当前 的对象是否能从weak_ptr提升为shared_ptr,以此来保证对象并未被销毁。 </p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>本书的代码其实是一点一点改进的，我就直接贴个最终版，然后一点一点分析好了=3=</p>
-<pre><code class="cpp"><span class="comment">//</span>
-<span class="comment">// Created by neojxwang(王靖煊) on 2019-08-08.</span>
-<span class="comment">//</span>
+                    <p>Leetcode 1040 Moving Stones Until Consecutive II </p>
+<p>这道题…卡了还挺久的，今天看了一个解法挺好的，记录一下。</p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>On an <strong>infinite</strong> number line, the position of the i-th stone is given by <code>stones[i]</code>. Call a stone an <em>endpoint stone</em> if it has the smallest or largest position.</p>
+<p>Each turn, you pick up an endpoint stone and move it to an unoccupied position so that it is no longer an endpoint stone.</p>
+<p>In particular, if the stones are at say, <code>stones = [1,2,5]</code>, you <strong>cannot</strong> move the endpoint stone at position 5, since moving it to any position (such as 0, or 3) will still keep that stone as an endpoint stone.</p>
+<p>The game ends when you cannot make any more moves, ie. the stones are in consecutive positions.</p>
+<p>When the game ends, what is the minimum and maximum number of moves that you could have made? Return the answer as an length 2 array: <code>answer = [minimum_moves, maximum_moves]</code></p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [7,4,9]</span><br><span class="line">Output: [1,2]</span><br><span class="line">Explanation: </span><br><span class="line">We can move 4 -&gt; 8 for one move to finish the game.</span><br><span class="line">Or, we can move 9 -&gt; 5, 4 -&gt; 6 for two moves to finish the game.</span><br></pre></td></tr></table></figure>
 
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span>
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: [6,5,4,3,10]</span><br><span class="line">Output: [2,3]</span><br><span class="line">We can move 3 -&gt; 8 then 10 -&gt; 7 to finish the game.</span><br><span class="line">Or, we can move 3 -&gt; 7, 4 -&gt; 8, 5 -&gt; 9 to finish the game.</span><br><span class="line">Notice we cannot move 10 -&gt; 2 to finish the game, because that would be an illegal move.</span><br></pre></td></tr></table></figure>
 
-<span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;
-<span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">string</span>;
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: [100,101,104,102,103]</span><br><span class="line">Output: [0,0]</span><br></pre></td></tr></table></figure>
 
-<span class="class"><span class="keyword">class</span> <span class="title">Stock</span></span>
-<span class="class">{</span>
-<span class="keyword">public</span>:
 
-    Stock() {}
-    Stock(<span class="built_in">string</span> key) : key_(key) {}
 
-    <span class="function"><span class="built_in">string</span> <span class="title">key</span><span class="params">()</span></span>
-<span class="function">    </span>{
-        <span class="keyword">return</span> key_;
-    }
-<span class="keyword">private</span>:
-    <span class="built_in">std</span>::<span class="built_in">string</span> key_;
+<p><strong>Note:</strong></p>
+<ol>
+<li><p><code>3 &lt;= stones.length &lt;= 10^4</code></p>
+</li>
+<li><p><code>1 &lt;= stones[i] &lt;= 10^9</code></p>
+</li>
+<li><p><code>stones[i]</code> have distinct values.</p>
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2></li>
+</ol>
+<p>在一条无限长的线上给定n个数字代表位置，每次可以取一个endpoint，即首尾的点插入到中间的空位，唯一的限制就是每个endpoint不能再插入以后依然作为endpoint，一直到所有的数字都是连续的，我们不能再继续移动endpoint为止，题目需要我们返回移动的最少和最大次数。</p>
+<p>我们先来看max_steps, 我们可以将所有的数字从最左边或者最右边开始往中间插，每次插入到第一个空位，举个🌰， 数组<code>[1, 3, 5, 6, 8, 9]</code>，我们可以将所有的数字作如下移动：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[1, 3, 5, 6, 8, 9]</span><br><span class="line">[3, 4, 5, 6, 8, 9]</span><br><span class="line">[4, 5, 6, 7, 8, 9]</span><br></pre></td></tr></table></figure>
 
-};
+<p>又或者这个数组<code>[1, 2, 3, 4, 5, 8]</code>,我们进行的操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[1, 2, 3, 4, 5, 8]</span><br><span class="line">[2, 3, 4, 5, 6, 8]</span><br><span class="line">[3, 4, 5, 6, 7, 8]</span><br></pre></td></tr></table></figure>
 
-<span class="class"><span class="keyword">class</span> <span class="title">StockFactory</span></span>
-<span class="class">{</span>
-<span class="keyword">public</span>:
-    <span class="built_in">shared_ptr</span>&lt;Stock&gt; get(<span class="built_in">std</span>::<span class="built_in">string</span> key)
-    {
-        <span class="built_in">shared_ptr</span>&lt;Stock&gt; sPtr;
+<p>​        所以我们首先可以得出给定的数组中的空位一共有<code>s1=stones[n-1] - stones[0] + 1 - n</code>, 但是并不是所有的空位都可以插入数字，举个例子，<code>[1, 4, 6]</code>中，把1移到5以后，<strong>2-3</strong>就不能再继续插入数字了，即第一次移动石子的时候，移动以后和原本移动的石子相邻的石子，这两个石子之间的空位不能继续插入数字，即为<code>s2=min(stones[n-1] - stones[n-2] - 1, stones[1] - stones[0] - 1)</code>，那么我们的max_steps可以通过<code>s2-s1</code>得到，<code>max_steps=max(stones[n-2] - stones[n-2] + 2 - n, stones[n-1] - stones[1] + 2 - n)</code>。</p>
+<p>​        然后是最小值min_steps, 我们可以知道，当我们的得到最终结果的时候，一定是一排连续的数字，如果需要求最小的移动数，一定是和最后结果重合数最多的。所以我们用一个滑动窗口来记录当前范围内的所有数字，只要这个窗口大于n我们就计算当前数组和<strong>n个连续数字的数组</strong>的重合数，找最小的就是结果。但是这个题还有一个地方不一样，比如<code>[1, 2, 3, 4, 6]</code>, 这个时候我们不能把6移到5，而是把4移到5，然后把6移到4，所以开销（移动数量）为2。</p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; numMovesStonesII(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; stones)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> n = <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(stones.size());</span><br><span class="line">    sort(begin(stones), end(stones));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> max_steps = <span class="built_in">std</span>::max(stones[n<span class="number">-2</span>] - stones[<span class="number">0</span>] + <span class="number">2</span> - n, stones[n<span class="number">-1</span>] - stones[<span class="number">1</span>] + <span class="number">2</span> -n);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> min_steps = INT_MAX;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span> (j + <span class="number">1</span> &lt; n &amp;&amp; stones[j+<span class="number">1</span>] - stones[i] + <span class="number">1</span> &lt;= n)</span><br><span class="line">            j++;</span><br><span class="line">        <span class="keyword">int</span> cost = n - (j - i + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (j - i + <span class="number">1</span> == n<span class="number">-1</span> &amp;&amp; stones[j] - stones[i] + <span class="number">1</span> == n<span class="number">-1</span>)</span><br><span class="line">            cost = <span class="number">2</span>;</span><br><span class="line">        min_steps = <span class="built_in">std</span>::min(min_steps, cost);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;min_steps, max_steps&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-        pthread_mutex_lock(&amp;mutex_);
-        weak_ptr&lt;Stock&gt;&amp; wPtr = mp[key];
-        sPtr = wPtr.lock();
-        <span class="keyword">if</span> (!sPtr) {
-            sPtr.reset(<span class="keyword">new</span> Stock(key), <span class="built_in">std</span>::bind(&amp;StockFactory::<span class="keyword">delete</span>, weak_ptr&lt;StockFactory&gt;(enable_shared_from_this()), _1));
-            wPtr = sPtr;
-        }
-        pthread_mutex_unlock(&amp;mutex_);
-        <span class="keyword">return</span> sPtr;
-    }
-
-<span class="keyword">private</span>:
-    <span class="keyword">pthread_mutex_t</span> mutex_;
-    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="built_in">std</span>::weak_ptr&lt;Stock&gt;&gt; mp;
-
-    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(weak_ptr&lt;Stock&gt; wPtr, Stock *stock)</span></span>
-<span class="function">    </span>{
-        <span class="built_in">shared_ptr</span>&lt;StockFactory&gt; factory(wPtr.lock());
-
-        <span class="keyword">if</span> (factory)
-        {
-            factory-&gt;removeStock(stock);
-        }
-
-        <span class="keyword">delete</span> stock;
-    }
-
-    <span class="function"><span class="keyword">void</span> <span class="title">removeStock</span><span class="params">(Stock * stock)</span></span>
-<span class="function">    </span>{
-        <span class="keyword">if</span> (stock)
-        {
-            pthread_mutex_lock(&amp;mutex_);
-            mp.erase(stock-&gt;key());
-        }
-    }
-};
-
-</code></pre>
-<p>假设有各个股票，每个股票有一个唯一代码key，我们唯一要做的就是通过这个key来取到股票的对象，但是获得这个对象在多进 程环境下其实是存在竞争的，假设如下情况，进程A刚刚通过get()方法获得了对应的股票对象，进程B被推上CPU，并对那个 股票对象进行了销毁操作，并切回进程A，那么此时，会出现coredump。</p>
-<p>所以我们最一开始的使用一个shared_ptr来存储map中的Stock对象，即<strong>std::map&lt;std::string, std::shared_ptr<stock>&gt;</stock></strong> 但是这样虽然可以方便对象的生命周期管理，但是此时的shared_ptr<strong>不会被销毁</strong>,所以我们该用weak_ptr来对 map中的Stock进行管理，只有在真正进行操作的时候，才将weak_ptr提升成shared_ptr。</p>
-<p>但是这个样子其实还是会使得内存进行泄漏的，那个map的size其实是只增不减的，因为并没有将map中的元素进行erase， 即使这个元素没有被引用，使用的内存也不会减少，这其实就是变相的内存泄露。所以我们使用shared_ptr的定制内存销毁函数， 也就是使用std::bind()将shared_ptr的第二个元素绑定为一个函数，在这里bind了一个类内部函数，所以使用 std::bind(&amp;StockFactory::delete, this, _1)作为shared_ptr.reset()的第二个参数。 </p>
-<blockquote>
-<p>bind 用法可以见上篇文章</p>
-</blockquote>
-<p>但是这个时候我们又出现了新的问题，我们将this指针作为参数传给了函数，这就很有可能造成多进程环境下的竞态，一旦 这个类在进程A中被destroy，那么在另一个进程中调用this指针就会造成coredump，所以我们还是使用shared_ptr指针来管理this指针， 这就用到了enable_shared_from_this()方法，该方法可以返回get()成员函数指向的类本身，且是一个shared_ptr函数， 这就保证我们不会在这个类被销毁以后还能调用到this指针，更准确点，应该是我们会保证this被调用的时候，这个类的实例一定不会被销毁。 解决了this指针的问题，我们会发现，此时bind中绑定的StockFactory类实例的生命周期被延长了，我们此时可以通过 <strong>弱回调技术</strong>来解决这个问题。 </p>
-<blockquote>
-<p>所谓弱回调，顾名思义，我们对一个类实例的调用不会影响其本身的生命周期，只在需要的时候保证该类没有被销毁就可以。（我自己瞎说的</p>
-</blockquote>
-<p>最终版本的code就在上面。我们可以看到，这个enable_shared_from_this()方法产生的shared_ptr指针其实被放在了一个 weak_ptr指针中，这就保证this指针的类实例<strong>一定</strong>不会被意外的延长生命周期，而且在需要对this指针进行 操作时，我们可以通过对weak_ptr指针的lock()操作来确保类实例是存在的，这就是弱回调技术。 </p>
-<ul>
-<li>总结一下，运用的技术主要是通过weak_ptr来对对象进行弱引用，以保证不意外延长对象的生命周期，并在需要对象的时候通过lock()来提升级别，以保证在多进程环境中对象实例还活着（XD</li>
-</ul>
 
                 </article>
                 <ul class="tags-postTags">
                     
                     <li>
                         <a href="/tags/C/" rel="tag"># C++</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/Leetcode/" rel="tag"># Leetcode</a>
                     </li>
                     
                 </ul>
@@ -265,14 +216,10 @@
     
     <nav id="gobottom" class="pagination">
         
-        <a class="prev-post" title="右值引用" href="/2019/08/13/右值引用/">
-            ← 右值引用
-        </a>
-        
         <span class="prev-next-post">·</span>
         
-        <a class="next-post" title="Leetcode-567-PermutationStrings" href="/2019/08/09/Leetcode-567-PermutationStrings/">
-            Leetcode-567-PermutationStrings →
+        <a class="next-post" title="Leetcode-926-FlipStringToMonotoneIncreasing" href="/2019/11/12/Leetcode-926-FlipStringToMonotoneIncreasing/">
+            Leetcode-926-FlipStringToMonotoneIncreasing →
         </a>
         
     </nav>
@@ -298,7 +245,7 @@
         </a>
     </div>
     <div class="toc-main">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#弱回调技术"><span class="toc-text">弱回调技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#shared-ptr-与-weak-ptr简介"><span class="toc-text">shared_ptr 与 weak_ptr简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例"><span class="toc-text">实例</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#题意"><span class="toc-text">题意</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code"><span class="toc-text">Code</span></a></li></ol>
     </div>
 </div>
 
@@ -517,7 +464,7 @@
 			<a href="/" title="Neo刷水题的地方">Neo刷水题的地方 &copy; 2019</a>
 			
 				
-			        <span hidden="true" id="/2019/08/11/弱回调/" class="leancloud-visitors" data-flag-title="弱回调">
+			        <span hidden="true" id="/2019/11/19/Leetcode-1040-MovingStonesUntilConsecutiveII/" class="leancloud-visitors" data-flag-title="Leetcode-1040-MovingStonesUntilConsecutiveII">
 			            <span>阅读量 </span>
 			            <span class="leancloud-visitors-count">0</span>
 			        </span>
