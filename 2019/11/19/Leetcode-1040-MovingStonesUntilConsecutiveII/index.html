@@ -182,8 +182,7 @@
 <li><code>1 &lt;= stones[i] &lt;= 10^9</code></li>
 <li><code>stones[i]</code> have distinct values.</li>
 </ol>
-<p>##题意</p>
-<p>在一条无限长的线上给定n个数字代表位置，每次可以取一个endpoint，即首尾的点插入到中间的空位，唯一的限制就是每个endpoint不能再插入以后依然作为endpoint，一直到所有的数字都是连续的，我们不能再继续移动endpoint为止，题目需要我们返回移动的最少和最大次数。</p>
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>在一条无限长的线上给定n个数字代表位置，每次可以取一个endpoint，即首尾的点插入到中间的空位，唯一的限制就是每个endpoint不能再插入以后依然作为endpoint，一直到所有的数字都是连续的，我们不能再继续移动endpoint为止，题目需要我们返回移动的最少和最大次数。</p>
 <p>我们先来看max_steps, 我们可以将所有的数字从最左边或者最右边开始往中间插，每次插入到第一个空位，举个🌰， 数组<code>[1, 3, 5, 6, 8, 9]</code>，我们可以将所有的数字作如下移动：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[1, 3, 5, 6, 8, 9]</span><br><span class="line">[3, 4, 5, 6, 8, 9]</span><br><span class="line">[4, 5, 6, 7, 8, 9]</span><br></pre></td></tr></table></figure>
 
@@ -243,7 +242,7 @@
         </a>
     </div>
     <div class="toc-main">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code"><span class="toc-text">Code</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#题意"><span class="toc-text">题意</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code"><span class="toc-text">Code</span></a></li></ol>
     </div>
 </div>
 
