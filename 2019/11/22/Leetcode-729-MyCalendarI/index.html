@@ -20,7 +20,7 @@
 	<link rel="preconnect" href="//9qpuwspm.api.lncld.net">
 	<link rel="preconnect" href="//gravatar.loli.net">
 
-	<title>LeetCode 424_LongestRepeatingCharacterReplacement | Neo刷水题的地方</title>
+	<title>Leetcode-729-MyCalendarI | Neo刷水题的地方</title>
 
 	<meta name="HandheldFriendly" content="True">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -48,14 +48,14 @@
 
 	<meta property="og:site_name" content="Neo刷水题的地方">
 	<meta property="og:type" content="article">
-	<meta property="og:title" content="LeetCode 424_LongestRepeatingCharacterReplacement | Neo刷水题的地方">
+	<meta property="og:title" content="Leetcode-729-MyCalendarI | Neo刷水题的地方">
 	<meta property="og:description" content>
-	<meta property="og:url" content="http://yoursite.c/2019/07/13/LeetCode-424-LongestRepeatingCharacterReplacement/">
+	<meta property="og:url" content="http://yoursite.c/2019/11/22/Leetcode-729-MyCalendarI/">
 
 	
-	<meta property="article:published_time" content="2019-07-13T21:07:00+08:00"> 
+	<meta property="article:published_time" content="2019-11-22T12:11:00+08:00"> 
 	<meta property="article:author" content="Neo">
-	<meta property="article:published_first" content="Neo刷水题的地方, /2019/07/13/LeetCode-424-LongestRepeatingCharacterReplacement/">
+	<meta property="article:published_first" content="Neo刷水题的地方, /2019/11/22/Leetcode-729-MyCalendarI/">
 	
 
 	
@@ -144,29 +144,49 @@
     <div class="inner">
         <header class="post-full-header">
             <div class="post-full-meta">
-                <time class="post-full-meta-date" datetime="2019-07-13T13:19:36.000Z">
-                    2019-07-13
+                <time class="post-full-meta-date" datetime="2019-11-22T04:41:41.000Z">
+                    2019-11-22
                 </time>
                 
                 <span class="date-divider">/</span>
                 
-                <a href="/categories/算法/">算法</a>&nbsp;&nbsp;
-                
                 
             </div>
-            <h1 class="post-full-title">LeetCode 424_LongestRepeatingCharacterReplacement</h1>
+            <h1 class="post-full-title">Leetcode-729-MyCalendarI</h1>
         </header>
         <div class="post-full no-image">
             
             <div class="post-full-content">
                 <article id="photoswipe" class="markdown-body">
-                    <h1 id="LeetCode-424-Longest-RepeatingCharacterReplacement"><a href="#LeetCode-424-Longest-RepeatingCharacterReplacement" class="headerlink" title="LeetCode 424 Longest RepeatingCharacterReplacement"></a>LeetCode 424 Longest RepeatingCharacterReplacement</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><blockquote>
-<p>Given a string s that consists of only uppercase English letters, you can perform at<br>most k operations on that string.In one operation, you can choose any character of the<br>string and change it to any other uppercase English character.Find the length of the longest<br>sub-string containing all repeating letters you can get after performing the above operations.</p>
+                    <p>Leetcode 729  MyCalendar I</p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>Implement a <code>MyCalendar</code> class to store your events. A new event can be added if adding the event will not cause a double booking.</p>
+<p>Your class will have the method, <code>book(int start, int end)</code>. Formally, this represents a booking on the half open interval <code>[start, end)</code>, the range of real numbers <code>x</code> such that <code>start &lt;= x &lt; end</code>.</p>
+<p>A <em>double booking</em> happens when two events have some non-empty intersection (ie., there is some time that is common to both events.)</p>
+<p>For each call to the method <code>MyCalendar.book</code>, return <code>true</code> if the event can be added to the calendar successfully without causing a double booking. Otherwise, return <code>false</code> and do not add the event to the calendar.</p>
+<p>Your class will be called like this: <code>MyCalendar cal = new MyCalendar();``MyCalendar.book(start, end)</code></p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MyCalendar();</span><br><span class="line">MyCalendar.book(10, 20); // returns true</span><br><span class="line">MyCalendar.book(15, 25); // returns false</span><br><span class="line">MyCalendar.book(20, 30); // returns true</span><br><span class="line">Explanation: </span><br><span class="line">The first event can be booked.  The second can&apos;t because time 15 is already booked by another event.</span><br><span class="line">The third event can be booked, as the first event takes every time less than 20, but not including 20.</span><br></pre></td></tr></table></figure>
+
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>这道题题意比较简单，给定一个MyCalendar类，有一个book方法，每次传一个start和一个end, 表示从<code>[start,end)</code>的日期能否预定（左闭右开区间），可预定的话就定上并返回<code>true</code>，否则返回<code>false</code>。这个题其实不难，通过一个vector来记录当前记录的所有预定，每次遍历当前所有的预定，看是否和之前的预定有冲突。两个不同的solution就是在遍历方式上有所不同。</p>
+<h2 id="Code-1"><a href="#Code-1" class="headerlink" title="Code 1"></a>Code 1</h2><p>假设当前调用为<code>book(s1, e1)</code>, 当前遍历所有的预定到了<code>[s2, e2)</code>, 我们一共会有以下几个可能的情况：</p>
+<p>![411574399768_.pic](/Users/neojxwang/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/cdf30556663e3d8348e4ff0558c17600/Message/MessageTemp/9e20f478899dc29eb19741386f9343c8/Image/411574399768_.pic.jpg)</p>
+<p>我们可以看到，左边的红线只要小于右边的蓝线，都会是有overlap的情况，那么我们可以归结一下，就是<font color="red">max(s1, s2)</font> &lt; <font color="blue">min(e1, e2)</font>的话，就认为是有overlap的情况，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class MyCalendar &#123;</span><br><span class="line">private:</span><br><span class="line">    vector&lt;int&gt; mp_;</span><br><span class="line">public:</span><br><span class="line">    MyCalendar1() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    bool book(int start, int end) &#123;</span><br><span class="line">        int n = mp_.size();</span><br><span class="line">        for (int i = 0; i &lt; n; i += 2)</span><br><span class="line">            if (max(mp_[i], start) &lt; min(mp_[i+1], end))</span><br><span class="line">                return false;</span><br><span class="line">        mp_.push_back(start);</span><br><span class="line">        mp_.push_back(end);</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这个代码的空间复杂度是O(N), 时间复杂度最差是O(N^2)。</p>
+<p>)</p>
+<h2 id="Code-2"><a href="#Code-2" class="headerlink" title="Code 2"></a>Code 2</h2><p>刚刚说过，两个解法的不同其实就在于搜索已预定的所有序列的时候，<strong>Code 1</strong> 使用的是最朴素的遍历，我们这里将要使用的是二分查找。</p>
+<p>首先是两个C++的API:</p>
+<blockquote>
+<p>map&lt;Key,T,Compare,Allocator&gt;::upper_bound(const Key&amp; key)  获取当前map中第一个Key值小于等于key 的Key-Value pair。</p>
+<p>map&lt;Key,T,Compare,Allocator&gt;::lower_bound(const Key&amp; key) 获取当前map中第一个Key值大于等于key 的Key-Value pair。</p>
+<p>换言之，upper_bound和lower_bound返回的都是以<strong>参数key</strong>作为upper_bound或者lower_bound的第一个目标entry iterator。</p>
 </blockquote>
-<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>本题的意思是，给定一个只含有小写字母的单词，最多可以进行K次替换，找到长度最长的相同字母字串。</p>
-<p>本题一开始看的时候还以为是dp = =，后来想起来我最近刷的全是Two Pointers类型… 所以就往Slide Window方向<br>想，还是基本操作，一个指向beg，一个指向end…但是后来看了Discuss，这个解法真的惊到我了，属实优雅。</p>
-<p>用一个mp来记录slide window中经过的所有字母，但是这个里面只有两种字母，一个是数量最多的相同字母，我们用same<br>表示，还有0-k个字母是替换成same字母的，如果此时刚好有k个字母被替换，那么替换字母量达到最大，此时应该有<br>k + same == end - beg.一旦end - beg 大于 k + same,说明我们的slide window需要缩小，即beg++，这就是全部过程。</p>
-<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">characterReplacement</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> beg = <span class="number">0</span>, end = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> len = s.length();</span><br><span class="line">    <span class="keyword">int</span> same = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> mp[<span class="number">130</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(mp, <span class="number">0</span>, <span class="keyword">sizeof</span>(mp));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (end &lt; len) &#123;</span><br><span class="line">        same = max(same, ++mp[s[end++]]);</span><br><span class="line">        <span class="keyword">if</span> (end - beg - same &gt; k)</span><br><span class="line">            --mp[s[beg++]];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> end - beg;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后再来看这道题，假设book传进来的是<code>book(int start, end)</code>, 我们获得两个值，floor=upper_bound(start), ceiling=lower_bound(start), 右边是floor，左边是ceiling。我们先看左边的floor, 如果此时，<code>it-&gt;first &lt; end</code>,说明有overlap。</p>
+<p>按理来说这个时候应该通过upper_bound(start)获得左边的ceiling, 但是因为我们可以确定当前map里没有出现overlap，所以我们可以把lower_bound减一，来获得当前的upper_bound, 然后来判断<code>it-&gt;second &gt; start</code>就说明有overlap。</p>
+<p>![421574405947_.pic](/Users/neojxwang/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/cdf30556663e3d8348e4ff0558c17600/Message/MessageTemp/9e20f478899dc29eb19741386f9343c8/Image/421574405947_.pic.jpg)</p>
+<p>上代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class MyCalendar</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    map&lt;int, int&gt; mp;</span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    MyCalendar()&#123;&#125;</span><br><span class="line">    bool book(int start, int end)</span><br><span class="line">    &#123;</span><br><span class="line">        map&lt;int, int&gt;::const_iterator it = mp.lower_bound(start);</span><br><span class="line">        if (it != mp.cend() &amp;&amp; it-&gt;first &lt; end)</span><br><span class="line">            return false;</span><br><span class="line">        if (it != mp.cend() &amp;&amp; (--it)-&gt;second &gt; start)</span><br><span class="line">            return false;</span><br><span class="line">        mp[start] = end;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 
                 </article>
@@ -177,7 +197,7 @@
                     </li>
                     
                     <li>
-                        <a href="/tags/Leetcode/" rel="tag"># Leetcode</a>
+                        <a href="/tags/算法/" rel="tag"># 算法</a>
                     </li>
                     
                 </ul>
@@ -188,14 +208,10 @@
     
     <nav id="gobottom" class="pagination">
         
-        <a class="prev-post" title="Mutable关键字" href="/2019/07/21/Mutable关键字/">
-            ← Mutable关键字
-        </a>
-        
         <span class="prev-next-post">·</span>
         
-        <a class="next-post" title="LeetCode 992 SubarraysOfKDistincts" href="/2019/07/12/LeetCode-992-SubarraysOfKDistincts/">
-            LeetCode 992 SubarraysOfKDistincts →
+        <a class="next-post" title="Leetcode-1040-MovingStonesUntilConsecutiveII" href="/2019/11/19/Leetcode-1040-MovingStonesUntilConsecutiveII/">
+            Leetcode-1040-MovingStonesUntilConsecutiveII →
         </a>
         
     </nav>
@@ -221,7 +237,7 @@
         </a>
     </div>
     <div class="toc-main">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#LeetCode-424-Longest-RepeatingCharacterReplacement"><span class="toc-text">LeetCode 424 Longest RepeatingCharacterReplacement</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#题意"><span class="toc-text">题意</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code"><span class="toc-text">Code</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#题意"><span class="toc-text">题意</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-1"><span class="toc-text">Code 1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-2"><span class="toc-text">Code 2</span></a></li></ol>
     </div>
 </div>
 
@@ -442,7 +458,7 @@
 			<a href="/" title="Neo刷水题的地方">Neo刷水题的地方 &copy; 2019</a>
 			
 				
-			        <span hidden="true" id="/2019/07/13/LeetCode-424-LongestRepeatingCharacterReplacement/" class="leancloud-visitors" data-flag-title="LeetCode 424_LongestRepeatingCharacterReplacement">
+			        <span hidden="true" id="/2019/11/22/Leetcode-729-MyCalendarI/" class="leancloud-visitors" data-flag-title="Leetcode-729-MyCalendarI">
 			            <span>阅读量 </span>
 			            <span class="leancloud-visitors-count">0</span>
 			        </span>
