@@ -163,7 +163,7 @@
 </blockquote>
 <h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><p>先安装了一个虚拟机，VMWare Fusion 11.5 Pro，然后搞了一个Cent OS iso镜像，第一次安装的时候选错了，选成极简版的了，安装也没有GNome桌面 = = ，重新安了一下以后，调整了IPV4，可以正常上网了。</p>
 <p>根据书中讲的折腾出来的configure参数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --with-openssl=/root/openssl-1.0.2f --with-libatomic --with-zlib=/root/zlib-1.2.11 --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_stub_status_module --with-google_perftools_module --with-debug --with-pcre=/root/pcre-8.43</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --with-openssl=/root/openssl-1.0.2f --with-libatomic --with-zlib=/root/zlib-1.2.11 --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_stub_status_module --with-google_perftools_module --with-debug --with-pcre=/root/pcre-8.43 --add-module=/root/nginx/test_module/</span><br></pre></td></tr></table></figure>
 
 <p>主要是需要手动下载prce，openssl,以及zlib的源码，下好以后直接交叉编译，然后make -j4 &amp;&amp; make install 大法 目前已经编译好了。</p>
 <h1 id="启动-amp-关闭Nginx"><a href="#启动-amp-关闭Nginx" class="headerlink" title="启动 &amp; 关闭Nginx"></a>启动 &amp; 关闭Nginx</h1><p>最简单的启动方式，可以通过/usr/local/nginx/sbin/nginx 进行启动，使用默认设置，还可以指定conf以及指定指定pid写入的文件路径等等。</p>
@@ -435,7 +435,7 @@
 <footer class="site-footer outer">
 	<div class="site-footer-content inner">
 		<div class="copyright">
-			<a href="/" title="Neo刷水题的地方">Neo刷水题的地方 &copy; 2019</a>
+			<a href="/" title="Neo刷水题的地方">Neo刷水题的地方 &copy; 2020</a>
 			
 				
 			        <span hidden="true" id="/2019/10/07/nginx编译笔记/" class="leancloud-visitors" data-flag-title="nginx编译笔记">
