@@ -158,9 +158,16 @@
             
             <div class="post-full-content">
                 <article id="photoswipe" class="markdown-body">
-                    
+                    <h1 id="Nginx-ngx-module-t-结构体"><a href="#Nginx-ngx-module-t-结构体" class="headerlink" title="Nginx ngx_module_t 结构体"></a>Nginx ngx_module_t 结构体</h1><p>断断续续的记录一些nginx学习的内容。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ngx_module_s</span> &#123;</span></span><br><span class="line">    <span class="keyword">ngx_uint_t</span>            ctx_index;    <span class="comment">// 当前模块在本类模块中的顺序  比如 过滤类模块 等等  </span></span><br><span class="line">    <span class="keyword">ngx_uint_t</span>            index;        <span class="comment">// 当前类模块在所有模块中的顺序 如 一个http模块在 http src loc模块中的顺序</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">ngx_uint_t</span>            spare0;</span><br><span class="line">    <span class="keyword">ngx_uint_t</span>            spare1;</span><br><span class="line">    <span class="keyword">ngx_uint_t</span>            spare2;</span><br><span class="line">    <span class="keyword">ngx_uint_t</span>            spare3;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">ngx_uint_t</span>            version;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span>                 *ctx; <span class="comment">// 指向当前这类模块的公共接口</span></span><br><span class="line">    <span class="keyword">ngx_command_t</span>        *commands; <span class="comment">// 指向这个模块对应的所有命令</span></span><br><span class="line">    <span class="keyword">ngx_uint_t</span>            type; <span class="comment">// 模块类型</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 这7个方法在nginx的执行过程中扮演重要角色</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">ngx_int_t</span>           (*init_master)(<span class="keyword">ngx_log_t</span> *<span class="built_in">log</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">ngx_int_t</span>           (*init_module)(<span class="keyword">ngx_cycle_t</span> *cycle);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">ngx_int_t</span>           (*init_process)(<span class="keyword">ngx_cycle_t</span> *cycle);</span><br><span class="line">    <span class="keyword">ngx_int_t</span>           (*init_thread)(<span class="keyword">ngx_cycle_t</span> *cycle);</span><br><span class="line">    <span class="keyword">void</span>                (*exit_thread)(<span class="keyword">ngx_cycle_t</span> *cycle);</span><br><span class="line">    <span class="keyword">void</span>                (*exit_process)(<span class="keyword">ngx_cycle_t</span> *cycle);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span>                (*exit_master)(<span class="keyword">ngx_cycle_t</span> *cycle);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">uintptr_t</span>             spare_hook0;</span><br><span class="line">    <span class="keyword">uintptr_t</span>             spare_hook1;</span><br><span class="line">    <span class="keyword">uintptr_t</span>             spare_hook2;</span><br><span class="line">    <span class="keyword">uintptr_t</span>             spare_hook3;</span><br><span class="line">    <span class="keyword">uintptr_t</span>             spare_hook4;</span><br><span class="line">    <span class="keyword">uintptr_t</span>             spare_hook5;</span><br><span class="line">    <span class="keyword">uintptr_t</span>             spare_hook6;</span><br><span class="line">    <span class="keyword">uintptr_t</span>             spare_hook7;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
                 </article>
                 <ul class="tags-postTags">
+                    
+                    <li>
+                        <a href="/tags/nginx/" rel="tag"># nginx</a>
+                    </li>
                     
                 </ul>
             </div>
@@ -169,6 +176,10 @@
 
     
     <nav id="gobottom" class="pagination">
+        
+        <a class="prev-post" title="Leetcode-861-ReverseMatrixScore" href="/2020/03/10/Leetcode-861-ReverseMatrixScore/">
+            ← Leetcode-861-ReverseMatrixScore
+        </a>
         
         <span class="prev-next-post">·</span>
         
@@ -199,7 +210,7 @@
         </a>
     </div>
     <div class="toc-main">
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx-ngx-module-t-结构体"><span class="toc-text">Nginx ngx_module_t 结构体</span></a></li></ol>
     </div>
 </div>
 
@@ -301,6 +312,12 @@
       
       
       <li>
+        <a href="/2020/03/10/Leetcode-861-ReverseMatrixScore/">Leetcode-861-ReverseMatrixScore</a>
+      </li>
+      
+      
+      
+      <li>
         <a href="/2020/03/09/Nginx-ngx-module-t结构体/">Nginx ngx_module_t结构体</a>
       </li>
       
@@ -311,10 +328,6 @@
       </li>
       
       
-      
-      <li>
-        <a href="/2019/11/19/Leetcode-1040-MovingStonesUntilConsecutiveII/">Leetcode-1040-MovingStonesUntilConsecutiveII</a>
-      </li>
       
       
       
@@ -389,7 +402,7 @@
 		<h3 class="read-next-card-header-title">Tag Cloud</h3>
 	</header>
 	<div class="read-next-card-content-ext">
-		<a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 20.67px;">Leetcode</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/nginx/" style="font-size: 14px;">nginx</a> <a href="/tags/算法/" style="font-size: 17.33px;">算法</a>
+		<a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 21.5px;">Leetcode</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16.5px;">nginx</a> <a href="/tags/算法/" style="font-size: 19px;">算法</a>
 	</div>
 </article>
 
