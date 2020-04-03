@@ -158,8 +158,7 @@
             
             <div class="post-full-content">
                 <article id="photoswipe" class="markdown-body">
-                    <p>##Python通过调用C来提升性能的一次记录</p>
-<p>​        昨天遇到的一个事，同事通过Python来处理其他家厂商的日志，将格式转换成内部日志格式，不是复杂的需求，但是遇到了性能瓶颈，单核大概8000qps，500w行的日志处理大概需要3min。申请了的是16核机器，考虑到多线程情况下的调度，单机10w的qps应该是有点勉强能达到的，而且实际测试的时候，虽然能达到，但是16核cpu基本都跑🈵️了。虽然机器只有这一个服务在跑，但是实际占用大量时间的还有磁盘IO等会阻塞的操作，因此想着要给优化一下，思路是通过火焰图分析代码耗费时间的部分，然后通过C来重写该部分的逻辑，并通过Python的ctypes包来调用C的接口。</p>
+                    <h2 id="Python通过调用C来提升性能的一次记录"><a href="#Python通过调用C来提升性能的一次记录" class="headerlink" title="Python通过调用C来提升性能的一次记录"></a>Python通过调用C来提升性能的一次记录</h2><p>​        昨天遇到的一个事，同事通过Python来处理其他家厂商的日志，将格式转换成内部日志格式，不是复杂的需求，但是遇到了性能瓶颈，单核大概8000qps，500w行的日志处理大概需要3min。申请了的是16核机器，考虑到多线程情况下的调度，单机10w的qps应该是有点勉强能达到的，而且实际测试的时候，虽然能达到，但是16核cpu基本都跑🈵️了。虽然机器只有这一个服务在跑，但是实际占用大量时间的还有磁盘IO等会阻塞的操作，因此想着要给优化一下，思路是通过火焰图分析代码耗费时间的部分，然后通过C来重写该部分的逻辑，并通过Python的ctypes包来调用C的接口。</p>
 <h3 id="PyFlame安装及生成火焰图-amp-分析"><a href="#PyFlame安装及生成火焰图-amp-分析" class="headerlink" title="PyFlame安装及生成火焰图&amp;分析"></a>PyFlame安装及生成火焰图&amp;分析</h3><p>​        首先是通过火焰图来进行性能的分析，因为之前用过标准库的CProfile来查看某个py脚本的性能，命令是<code>python -m cProfile -s tottime test_parse.py</code>，可惜代码实际是多进程来做的，cProfile会报错，具体原因没有深究。经过google选了<a href https: github.com uber-archive pyflame"">PyFlame</a>来生成火焰图，具体依赖的库包括autoconf, automake 等等，不再列举，CentOS下的编译安装可参照<a href https: blog.csdn.net qq_30549833 article details 72955881"">这里</a>。<a href https: pyflame.readthedocs.io en latest "">官方文档</a>对于安装过程写的挺详细的，不再赘述。安装完PyFlame还需要安装一个<a href https: github.com brendangregg flamegraph"">FlameGraph</a>，通过其中的flamegraph.pl来生成火焰图。</p>
 <p>​        用法是，PyFlame会通过attach到具体的进程然后拿到进程调用链和耗费的时间，同时还支持设置采样的总时间以及每次采样的间隔时间，然后采样完成后把数据pipe到flamegraph.pl生成火焰图，可以在chrome中直接打开。</p>
 <blockquote>
@@ -261,7 +260,7 @@
         </a>
     </div>
     <div class="toc-main">
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#PyFlame安装及生成火焰图-amp-分析"><span class="toc-text">PyFlame安装及生成火焰图&amp;分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过火焰图进行分析-amp-优化"><span class="toc-text">通过火焰图进行分析 &amp; 优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python调用C"><span class="toc-text">Python调用C</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python通过调用C来提升性能的一次记录"><span class="toc-text">Python通过调用C来提升性能的一次记录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PyFlame安装及生成火焰图-amp-分析"><span class="toc-text">PyFlame安装及生成火焰图&amp;分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过火焰图进行分析-amp-优化"><span class="toc-text">通过火焰图进行分析 &amp; 优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python调用C"><span class="toc-text">Python调用C</span></a></li></ol></li></ol>
     </div>
 </div>
 
