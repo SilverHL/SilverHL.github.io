@@ -167,14 +167,14 @@
 </blockquote>
 <p>（并未设置采样间隔 可通过-r进行设置</p>
 <h3 id="通过火焰图进行分析-amp-优化"><a href="#通过火焰图进行分析-amp-优化" class="headerlink" title="通过火焰图进行分析 &amp; 优化"></a>通过火焰图进行分析 &amp; 优化</h3><p>生成的图是这样的：</p>
-<p>![image-20200403170745852](/Users/neojxwang/Library/Application Support/typora-user-images/image-20200403170745852.png)</p>
+<p><img alt class="post-img b-lazy" data-img="https://raw.githubusercontent.com/SilverHL/image_repo/master/1.png" data-index="0" data-src="https://raw.githubusercontent.com/SilverHL/image_repo/master/1.png"></p>
 <p>（一开始不会看火焰图有点尴尬 害 补充一点小知识</p>
 <blockquote>
 <p>经过Google，火焰图的颜色与耗费时常啥🐔8⃣️关系都🈚️。需要注意的是横向代码的长度<strong>代表代码执行耗费的时间</strong>，纵向往上的层级越多，越说明<strong>调用链越长</strong>strong&gt;，也就越有可能<strong>占用CPU时间</strong>。</p>
 </blockquote>
 <p>​        我们可以在图中看到，实际最花时间的应该是四个蓝色箭头所指的位置，可优化的也在这里。看了下代码，其中<strong>1号左侧</strong>的代码对应的是在IO磁盘操作，即在硬盘中读取日志出来，这个消耗实际上是不能避免的。1号操作对应的是将某一条日志通过正则提取出某些必要的信息，也就是说<strong>正则匹配</strong>消耗了一定时间，想来想去没有什么好的优化手段，因为日志格式是固定的，所以还是用<strong>split(“ “)</strong>来把正则替换掉（其实是有一些作用的哈哈哈哈哈哈哈哈哈）。</p>
 <p>​        再来看2-4号操作，这几个其实都是一样的操作，把原日志中的UTC时间（格林尼治标准时间）转换成CST（东八区北京时间），经过线下与同事商量，去掉了后两个，因为他也没用到（手动狗头。经过这一番操作，火焰图变成了酱：</p>
-<p>![image-20200403181338126](/Users/neojxwang/Library/Application Support/typora-user-images/image-20200403181338126.png)</p>
+<p><img alt="image-20200403181338126" class="post-img b-lazy" data-img="https://raw.githubusercontent.com/SilverHL/image_repo/master/2.png" data-index="1" data-src="https://raw.githubusercontent.com/SilverHL/image_repo/master/2.png"></p>
 <p>​        也就是说，<strong>原来的1号</strong>（正则匹配）消耗的时间比较少，上图的1号，涉及到比较深层次的调用，应该是属于磁盘IO，也就是无法避免的消耗。而2号就是时间转换，需要将原日志的字符串转成datetime对象，然后进行时区的转换，在转回字符串。因为实际linux获取时间实际是需要系统调用的，因此还是很消耗时间的，所以这块用C来重写，以期提高性能。</p>
 <h3 id="Python调用C"><a href="#Python调用C" class="headerlink" title="Python调用C"></a>Python调用C</h3><p>​        经过一番Google，发现ctypes实际是比较好用的，写C就可以，然后编译成动态链接库，再在python中调用。不像Cython，需要写Python（8是很会写py），实际比python多的就是指定类型，在编译期就完成类型的推导，不像原生的python需要在运行期动态的推导类型，耗费时间过多，（后话，可能会研究下这方面）。</p>
 <p>​        首先是用C完成时间转换的步骤，介绍几个API:</p>
@@ -213,12 +213,12 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">time_convert = CDLL(<span class="string">"./utc_to_cst.so"</span>)	<span class="comment"># add dll</span></span><br><span class="line">in_arg = c_char_p(<span class="string">"2018-02-19 00:00:00"</span>) <span class="comment"># specify in arg type (char *)</span></span><br><span class="line">u_to_c = time_convert.utc_to_cst	<span class="comment"># connect u_to_c with symbol utc_to_cst in .so file</span></span><br><span class="line">u_to_c.restype = c_char_p <span class="comment"># specify return type in c (char *)</span></span><br><span class="line">print(u_to_c(in_arg))</span><br></pre></td></tr></table></figure>
 
 <p>实际上到这里就٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎ了，但是应用到的时候出现了一个诡异的现象，他🐎的用完C的模块居然还更慢了！生成的火焰图如下：</p>
-<p>![image-20200403181450308](/Users/neojxwang/Library/Application Support/typora-user-images/image-20200403181450308.png)</p>
+<p><img alt="image-20200403181450308" class="post-img b-lazy" data-img="https://raw.githubusercontent.com/SilverHL/image_repo/master/3.png" data-index="2" data-src="https://raw.githubusercontent.com/SilverHL/image_repo/master/3.png"></p>
 <p>​        可以看到2号占用的时间比上一张图长了 = = 实际测试500w行处理完成的时间也有4min，耗费时间实际上花在了ctypes的__init__()方法上，然后就没有更深的调用链了。我就去实际的看了下ctypes的__init__到底做了个啥事，代码中有几行是这样的：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if handle is None:</span><br><span class="line">    self._handle = _dlopen(self._name, mode)</span><br><span class="line">else:</span><br><span class="line">    self._handle = handle</span><br></pre></td></tr></table></figure>
 
 <p>​        handle应该指的就是.so文件中的符号，即utc_to_cst, 代表我们调用的C代码中的处理方法，然后想到用的时候，把<code>time_convert = CDLL(&quot;./utc_to_cst.so&quot;)</code>这行加在了循环，才导致有大量的时间花在了_dlopen()中，果断把这行移除循环，终于得到了满意的结果，火焰图如下：</p>
-<p>![image-20200403182202297](/Users/neojxwang/Library/Application Support/typora-user-images/image-20200403182202297.png)</p>
+<p><img alt="image-20200403182202297" class="post-img b-lazy" data-img="https://raw.githubusercontent.com/SilverHL/image_repo/master/4.png" data-index="3" data-src="https://raw.githubusercontent.com/SilverHL/image_repo/master/4.png"></p>
 <p>经过实际测试，完成以上的优化过程后，单核qps可以达到5w左右，就算突发也可以很好的应付。</p>
 
                 </article>
