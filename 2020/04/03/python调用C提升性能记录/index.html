@@ -20,7 +20,7 @@
 	<link rel="preconnect" href="//9qpuwspm.api.lncld.net">
 	<link rel="preconnect" href="//gravatar.loli.net">
 
-	<title>Leetcode-234-PalindromeLinkedList | Neo刷水题的地方</title>
+	<title>python调用C提升性能记录 | Neo刷水题的地方</title>
 
 	<meta name="HandheldFriendly" content="True">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -48,14 +48,14 @@
 
 	<meta property="og:site_name" content="Neo刷水题的地方">
 	<meta property="og:type" content="article">
-	<meta property="og:title" content="Leetcode-234-PalindromeLinkedList | Neo刷水题的地方">
+	<meta property="og:title" content="python调用C提升性能记录 | Neo刷水题的地方">
 	<meta property="og:description" content>
-	<meta property="og:url" content="http://yoursite.c/2019/08/18/Leetcode-234-PalindromeLinkedList/">
+	<meta property="og:url" content="http://yoursite.c/2020/04/03/python调用C提升性能记录/">
 
 	
-	<meta property="article:published_time" content="2019-08-18T21:08:00+08:00"> 
+	<meta property="article:published_time" content="2020-04-03T16:04:00+08:00"> 
 	<meta property="article:author" content="Neo">
-	<meta property="article:published_first" content="Neo刷水题的地方, /2019/08/18/Leetcode-234-PalindromeLinkedList/">
+	<meta property="article:published_first" content="Neo刷水题的地方, /2020/04/03/python调用C提升性能记录/">
 	
 
 	
@@ -144,49 +144,85 @@
     <div class="inner">
         <header class="post-full-header">
             <div class="post-full-meta">
-                <time class="post-full-meta-date" datetime="2019-08-18T13:12:38.000Z">
-                    2019-08-18
+                <time class="post-full-meta-date" datetime="2020-04-03T08:37:02.000Z">
+                    2020-04-3
                 </time>
                 
                 <span class="date-divider">/</span>
                 
                 
             </div>
-            <h1 class="post-full-title">Leetcode-234-PalindromeLinkedList</h1>
+            <h1 class="post-full-title">python调用C提升性能记录</h1>
         </header>
         <div class="post-full no-image">
             
             <div class="post-full-content">
                 <article id="photoswipe" class="markdown-body">
-                    <p>Leetcode 234 Palindrome Linked List</p>
-<p>刷道水题  = = </p>
-<p>我也不知道为啥这题的通过率比hard的级别的通过率都低…我寻思可能是这个边界处理比较复杂？直接看题8.</p>
-<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>Given a singly linked list, determine if it is a palindrome.</p>
-<p><strong>Example 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 1-&gt;2</span><br><span class="line">Output: false</span><br></pre></td></tr></table></figure>
+                    <p>##Python通过调用C来提升性能的一次记录</p>
+<p>​        昨天遇到的一个事，同事通过Python来处理其他家厂商的日志，将格式转换成内部日志格式，不是复杂的需求，但是遇到了性能瓶颈，单核大概8000qps，500w行的日志处理大概需要3min。申请了的是16核机器，考虑到多线程情况下的调度，单机10w的qps应该是有点勉强能达到的，而且实际测试的时候，虽然能达到，但是16核cpu基本都跑🈵️了。虽然机器只有这一个服务在跑，但是实际占用大量时间的还有磁盘IO等会阻塞的操作，因此想着要给优化一下，思路是通过火焰图分析代码耗费时间的部分，然后通过C来重写该部分的逻辑，并通过Python的ctypes包来调用C的接口。</p>
+<h3 id="PyFlame安装及生成火焰图-amp-分析"><a href="#PyFlame安装及生成火焰图-amp-分析" class="headerlink" title="PyFlame安装及生成火焰图&amp;分析"></a>PyFlame安装及生成火焰图&amp;分析</h3><p>​        首先是通过火焰图来进行性能的分析，因为之前用过标准库的CProfile来查看某个py脚本的性能，命令是<code>python -m cProfile -s tottime test_parse.py</code>，可惜代码实际是多进程来做的，cProfile会报错，具体原因没有深究。经过google选了<a href https: github.com uber-archive pyflame"">PyFlame</a>来生成火焰图，具体依赖的库包括autoconf, automake 等等，不再列举，CentOS下的编译安装可参照<a href https: blog.csdn.net qq_30549833 article details 72955881"">这里</a>。<a href https: pyflame.readthedocs.io en latest "">官方文档</a>对于安装过程写的挺详细的，不再赘述。安装完PyFlame还需要安装一个<a href https: github.com brendangregg flamegraph"">FlameGraph</a>，通过其中的flamegraph.pl来生成火焰图。</p>
+<p>​        用法是，PyFlame会通过attach到具体的进程然后拿到进程调用链和耗费的时间，同时还支持设置采样的总时间以及每次采样的间隔时间，然后采样完成后把数据pipe到flamegraph.pl生成火焰图，可以在chrome中直接打开。</p>
+<blockquote>
+<p>pyflame -s 10 -p 26788 | ../../FlameGraph/flamegraph.pl &gt; A.svg</p>
+</blockquote>
+<p>（并未设置采样间隔 可通过-r进行设置</p>
+<h3 id="通过火焰图进行分析-amp-优化"><a href="#通过火焰图进行分析-amp-优化" class="headerlink" title="通过火焰图进行分析 &amp; 优化"></a>通过火焰图进行分析 &amp; 优化</h3><p>生成的图是这样的：</p>
+<p>![image-20200403170745852](/Users/neojxwang/Library/Application Support/typora-user-images/image-20200403170745852.png)</p>
+<p>（一开始不会看火焰图有点尴尬 害 补充一点小知识</p>
+<blockquote>
+<p>经过Google，火焰图的颜色与耗费时常啥🐔8⃣️关系都🈚️。需要注意的是横向代码的长度<strong>代表代码执行耗费的时间</strong>，纵向往上的层级越多，越说明<strong>调用链越长</strong>strong&gt;，也就越有可能<strong>占用CPU时间</strong>。</p>
+</blockquote>
+<p>​        我们可以在图中看到，实际最花时间的应该是四个蓝色箭头所指的位置，可优化的也在这里。看了下代码，其中<strong>1号左侧</strong>的代码对应的是在IO磁盘操作，即在硬盘中读取日志出来，这个消耗实际上是不能避免的。1号操作对应的是将某一条日志通过正则提取出某些必要的信息，也就是说<strong>正则匹配</strong>消耗了一定时间，想来想去没有什么好的优化手段，因为日志格式是固定的，所以还是用<strong>split(“ “)</strong>来把正则替换掉（其实是有一些作用的哈哈哈哈哈哈哈哈哈）。</p>
+<p>​        再来看2-4号操作，这几个其实都是一样的操作，把原日志中的UTC时间（格林尼治标准时间）转换成CST（东八区北京时间），经过线下与同事商量，去掉了后两个，因为他也没用到（手动狗头。经过这一番操作，火焰图变成了酱：</p>
+<p>![image-20200403181338126](/Users/neojxwang/Library/Application Support/typora-user-images/image-20200403181338126.png)</p>
+<p>​        也就是说，<strong>原来的1号</strong>（正则匹配）消耗的时间比较少，上图的1号，涉及到比较深层次的调用，应该是属于磁盘IO，也就是无法避免的消耗。而2号就是时间转换，需要将原日志的字符串转成datetime对象，然后进行时区的转换，在转回字符串。因为实际linux获取时间实际是需要系统调用的，因此还是很消耗时间的，所以这块用C来重写，以期提高性能。</p>
+<h3 id="Python调用C"><a href="#Python调用C" class="headerlink" title="Python调用C"></a>Python调用C</h3><p>​        经过一番Google，发现ctypes实际是比较好用的，写C就可以，然后编译成动态链接库，再在python中调用。不像Cython，需要写Python（8是很会写py），实际比python多的就是指定类型，在编译期就完成类型的推导，不像原生的python需要在运行期动态的推导类型，耗费时间过多，（后话，可能会研究下这方面）。</p>
+<p>​        首先是用C完成时间转换的步骤，介绍几个API:</p>
+<p>  将当前的时区设置为东八区北京时区：</p>
+<blockquote>
+<p>setenv(“TZ”, “GMT-8”, 1) </p>
+</blockquote>
+<p>将char *类型的时间字符串按照format格式转换到struct tm类型</p>
+<blockquote>
+<p>char *strptime(const char *s, const char *format, struct tm *tm);</p>
+</blockquote>
+<p>将struct tm *类型的timeptr按照format格式转换到char *, maxsize指的需要填充的buffer的最大长度</p>
+<blockquote>
+<p>size_t strftime(char *str, size_t maxsize, const char *format, const struct tm *timeptr)</p>
+</blockquote>
+<p>将struct tm *类型转换成unix时间戳</p>
+<blockquote>
+<p>time_t timegm(struct tm *tm);</p>
+</blockquote>
+<p>将struct tm *类型转换成本地时区的unix时间戳（似乎不需要上面的setenv</p>
+<blockquote>
+<p>time_t mktime(struct tm *timeptr)</p>
+</blockquote>
+<p>将time_t类型的unix时间戳转换成struct tm*</p>
+<blockquote>
+<p>struct tm *localtime(const time_t *timer)</p>
+</blockquote>
+<p>上代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/times.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *</span><br><span class="line">utc_to_cst(<span class="keyword">const</span> <span class="keyword">char</span> *utc_time)</span><br><span class="line">&#123;</span><br><span class="line">   setenv(<span class="string">"TZ"</span>, <span class="string">"GMT-8"</span>, <span class="number">1</span>);        <span class="comment">// set current timezone beijing</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">tm</span> <span class="title">tmstr</span>;</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">tm</span> * <span class="title">tmlocal</span>;</span></span><br><span class="line">   <span class="keyword">time_t</span> tslastutc;</span><br><span class="line">   <span class="keyword">time_t</span> tslastloc;</span><br><span class="line">   <span class="keyword">char</span> cst_time[<span class="number">32</span>];</span><br><span class="line">   <span class="built_in">memset</span>(&amp;tmstr, <span class="number">0</span>, <span class="keyword">sizeof</span>(struct tm));</span><br><span class="line">   strptime(utc_time, <span class="string">"%Y-%m-%d %H:%M:%S"</span>, &amp;tmstr); <span class="comment">// convert argument to struct tm</span></span><br><span class="line">   <span class="built_in">memset</span>(cst_time, <span class="number">0</span>, <span class="number">32</span>);</span><br><span class="line">   strftime(cst_time, <span class="number">32</span>, <span class="string">"%Y-%m-%d %H:%M:%S"</span>, &amp;tmstr); <span class="comment">// convert struct tm to string, still</span></span><br><span class="line"></span><br><span class="line">   tslastutc = timegm(&amp;tmstr);     <span class="comment">// get UCT Unix time from argument string time  GMT</span></span><br><span class="line">   tslastloc = mktime(&amp;tmstr);     <span class="comment">// get local Unix time from argument string time</span></span><br><span class="line">   tslastloc += (tslastutc - tslastloc);    <span class="comment">// wired operation, seems to reduce deviation</span></span><br><span class="line">   tmlocal = localtime (&amp;tslastloc); 	<span class="comment">// get local time in struct tm format</span></span><br><span class="line">   <span class="built_in">memset</span>(cst_time, <span class="number">0</span>, <span class="number">32</span>);</span><br><span class="line">   strftime(cst_time, <span class="number">32</span>, <span class="string">"%Y-%m-%d %H:%M:%S"</span>, tmlocal); <span class="comment">// convert local struct tm to string</span></span><br><span class="line">   <span class="keyword">return</span> cst_time;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>Example 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 1-&gt;2-&gt;2-&gt;1</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
+<p>​        通过这个命令将代码编译成动态链接库，并通过python代码进行调用：</p>
+<blockquote>
+<p>gcc -shared -Wl,-soname,utc_to_cst -o utc_to_cst.so -fPIC utc_to_cst.c</p>
+</blockquote>
+<p>​        python调用代码如下（其实也是通过指明符号名、变量和返回值类型）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">time_convert = CDLL(<span class="string">"./utc_to_cst.so"</span>)	<span class="comment"># add dll</span></span><br><span class="line">in_arg = c_char_p(<span class="string">"2018-02-19 00:00:00"</span>) <span class="comment"># specify in arg type (char *)</span></span><br><span class="line">u_to_c = time_convert.utc_to_cst	<span class="comment"># connect u_to_c with symbol utc_to_cst in .so file</span></span><br><span class="line">u_to_c.restype = c_char_p <span class="comment"># specify return type in c (char *)</span></span><br><span class="line">print(u_to_c(in_arg))</span><br></pre></td></tr></table></figure>
 
-<p><strong>Follow up:</strong><br>Could you do it in O(n) time and O(1) space?</p>
-<h1 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h1><p>其实就是最基本的单链表问题，问你给定的链表是否是一个回文链表，我寻思这个题其实一开始在刷牛客的链表题的时候就有过了。基本思路还是很清晰，找到链表的中间节点，然后将链表后半部分倒转，从两边的header分别遍历，最后看经过的路上的值是否一致就可以了。</p>
-<p>还有就是，我们没必要关心这个链表的长度是奇数或者偶数，因为即使分开两个链表长度相差1，我们只需要遍历前面相同的就可以了。</p>
-<p>最主要的地方还是，一开始找中点的时候，需要一个快慢指针，当快指针的next以及next-&gt;next有一个为空时，我们便认为到达了slow指针到达了中点，因为没法继续往下走了。然后是reverse list基本操作，但不要忘记将slow指针的next置为nullptr(C++11 不要像下面的代码一样写NULL).</p>
-<h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isPalindrome</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    ListNode *slow = head;</span><br><span class="line">    ListNode *fast = head;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* find middle point */</span></span><br><span class="line">    <span class="keyword">while</span> (fast-&gt;next &amp;&amp; fast-&gt;next-&gt;next) &#123;</span><br><span class="line">        slow = slow-&gt;next;</span><br><span class="line">        fast = fast-&gt;next-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* reverse half the list */</span></span><br><span class="line">    ListNode *cur = slow-&gt;next;</span><br><span class="line">    ListNode *next = cur-&gt;next;</span><br><span class="line">    ListNode *tmp = <span class="literal">NULL</span>;</span><br><span class="line">    cur-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* break the list */</span></span><br><span class="line">    slow-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (next != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        tmp = next-&gt;next;</span><br><span class="line">        next-&gt;next = cur;</span><br><span class="line">        cur = next;</span><br><span class="line">        next = tmp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* It doesn't matter the length of the list is odd or even,</span></span><br><span class="line"><span class="comment">     * because these two pointers will come to an end */</span></span><br><span class="line">    <span class="keyword">while</span> (head &amp;&amp; cur) &#123;</span><br><span class="line">        <span class="keyword">if</span> (head-&gt;val != cur-&gt;val)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        head = head-&gt;next;</span><br><span class="line">        cur = cur-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上到这里就٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎ了，但是应用到的时候出现了一个诡异的现象，他🐎的用完C的模块居然还更慢了！生成的火焰图如下：</p>
+<p>![image-20200403181450308](/Users/neojxwang/Library/Application Support/typora-user-images/image-20200403181450308.png)</p>
+<p>​        可以看到2号占用的时间比上一张图长了 = = 实际测试500w行处理完成的时间也有4min，耗费时间实际上花在了ctypes的__init__()方法上，然后就没有更深的调用链了。我就去实际的看了下ctypes的__init__到底做了个啥事，代码中有几行是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if handle is None:</span><br><span class="line">    self._handle = _dlopen(self._name, mode)</span><br><span class="line">else:</span><br><span class="line">    self._handle = handle</span><br></pre></td></tr></table></figure>
 
-<p>Done. </p>
-<p>今日份的水题。</p>
+<p>​        handle应该指的就是.so文件中的符号，即utc_to_cst, 代表我们调用的C代码中的处理方法，然后想到用的时候，把<code>time_convert = CDLL(&quot;./utc_to_cst.so&quot;)</code>这行加在了循环，才导致有大量的时间花在了_dlopen()中，果断把这行移除循环，终于得到了满意的结果，火焰图如下：</p>
+<p>![image-20200403182202297](/Users/neojxwang/Library/Application Support/typora-user-images/image-20200403182202297.png)</p>
+<p>经过实际测试，完成以上的优化过程后，单核qps可以达到5w左右，就算突发也可以很好的应付。</p>
 
                 </article>
                 <ul class="tags-postTags">
-                    
-                    <li>
-                        <a href="/tags/C/" rel="tag"># C++</a>
-                    </li>
-                    
-                    <li>
-                        <a href="/tags/Leetcode/" rel="tag"># Leetcode</a>
-                    </li>
                     
                 </ul>
             </div>
@@ -196,14 +232,10 @@
     
     <nav id="gobottom" class="pagination">
         
-        <a class="prev-post" title="SlideWindow模板" href="/2019/08/24/SlideWindow模板/">
-            ← SlideWindow模板
-        </a>
-        
         <span class="prev-next-post">·</span>
         
-        <a class="next-post" title="右值引用" href="/2019/08/13/右值引用/">
-            右值引用 →
+        <a class="next-post" title="Leetcode-861-ReverseMatrixScore" href="/2020/03/10/Leetcode-861-ReverseMatrixScore/">
+            Leetcode-861-ReverseMatrixScore →
         </a>
         
     </nav>
@@ -229,7 +261,7 @@
         </a>
     </div>
     <div class="toc-main">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#题目"><span class="toc-text">题目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#题意"><span class="toc-text">题意</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Code"><span class="toc-text">Code</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#PyFlame安装及生成火焰图-amp-分析"><span class="toc-text">PyFlame安装及生成火焰图&amp;分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过火焰图进行分析-amp-优化"><span class="toc-text">通过火焰图进行分析 &amp; 优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python调用C"><span class="toc-text">Python调用C</span></a></li></ol>
     </div>
 </div>
 
@@ -456,7 +488,7 @@
 			<a href="/" title="Neo刷水题的地方">Neo刷水题的地方 &copy; 2020</a>
 			
 				
-			        <span hidden="true" id="/2019/08/18/Leetcode-234-PalindromeLinkedList/" class="leancloud-visitors" data-flag-title="Leetcode-234-PalindromeLinkedList">
+			        <span hidden="true" id="/2020/04/03/python调用C提升性能记录/" class="leancloud-visitors" data-flag-title="python调用C提升性能记录">
 			            <span>阅读量 </span>
 			            <span class="leancloud-visitors-count">0</span>
 			        </span>
