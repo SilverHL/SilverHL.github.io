@@ -170,7 +170,7 @@
 <p><img alt class="post-img b-lazy" data-img="https://raw.githubusercontent.com/SilverHL/image_repo/master/1.png" data-index="0" data-src="https://raw.githubusercontent.com/SilverHL/image_repo/master/1.png"></p>
 <p>（一开始不会看火焰图有点尴尬 害 补充一点小知识</p>
 <blockquote>
-<p>经过Google，火焰图的颜色与耗费时常啥🐔8⃣️关系都🈚️。需要注意的是横向代码的长度<strong>代表代码执行耗费的时间</strong>，纵向往上的层级越多，越说明<strong>调用链越长</strong>strong&gt;，也就越有可能<strong>占用CPU时间</strong>。</p>
+<p>经过Google，火焰图的颜色与耗费时常啥🐔8⃣️关系都🈚️。需要注意的是横向代码的长度<strong>代表代码执行耗费的时间</strong>，纵向往上的层级越多，越说明<strong>调用链越长</strong>，也就越有可能<strong>占用CPU时间</strong>。</p>
 </blockquote>
 <p>​        我们可以在图中看到，实际最花时间的应该是四个蓝色箭头所指的位置，可优化的也在这里。看了下代码，其中<strong>1号左侧</strong>的代码对应的是在IO磁盘操作，即在硬盘中读取日志出来，这个消耗实际上是不能避免的。1号操作对应的是将某一条日志通过正则提取出某些必要的信息，也就是说<strong>正则匹配</strong>消耗了一定时间，想来想去没有什么好的优化手段，因为日志格式是固定的，所以还是用<strong>split(“ “)</strong>来把正则替换掉（其实是有一些作用的哈哈哈哈哈哈哈哈哈）。</p>
 <p>​        再来看2-4号操作，这几个其实都是一样的操作，把原日志中的UTC时间（格林尼治标准时间）转换成CST（东八区北京时间），经过线下与同事商量，去掉了后两个，因为他也没用到（手动狗头。经过这一番操作，火焰图变成了酱：</p>
