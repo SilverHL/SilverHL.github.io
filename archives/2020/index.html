@@ -140,7 +140,7 @@
             <h1 class="site-title">
                 Archives
             </h1>
-            <h2 class="site-description">Total: 26</h2>
+            <h2 class="site-description">Total: 28</h2>
         </div>
         
         
@@ -151,6 +151,106 @@
 <div id="site-main" class="site-main outer" role="main">
 	<div class="inner">
 		<div class="post-feed">
+			
+			<article class="post-card post  no-image ">
+				
+				<div class="post-card-content">
+					<a class="post-card-content-link" title="Nginx启动流程" href="/2020/06/09/Nginx启动流程/">
+						<header class="post-card-header">
+							<span class="post-card-tags">
+								
+								| 
+								
+								<time datetime="2020-06-09T14:59:02.000Z">
+									2020-06-09
+								</time>
+							</span>
+							<h2 class="post-card-title">Nginx启动流程</h2>
+						</header>
+						<div class="post-card-excerpt">
+							<p>
+								
+								
+								
+								
+								
+								
+								
+								
+								Nginx启动流程记录看《深入理解Nginx》已经很久了，还是决定开始写博客来记录下，来回顾看书学到的东西。
+Nginx模块Nginx模块化做的十分优秀，这其实
+								...
+							</p>
+						</div>
+					</a>
+					<footer class="post-card-meta">
+						<div class="author-list">
+							<div class="author-list-item">
+								<div class="author-name-tooltip">Neo</div>
+								
+								<a href="/about" class="static-avatar author-profile-image">
+									<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg>
+								</a>
+								
+							</div>
+						</div>
+						<span class="reading-time">
+							27
+							min read
+						</span>
+					</footer>
+				</div>
+			</article>
+			
+			<article class="post-card post  no-image ">
+				
+				<div class="post-card-content">
+					<a class="post-card-content-link" title href="/2020/05/04/Leetcode 1433/">
+						<header class="post-card-header">
+							<span class="post-card-tags">
+								
+								| 
+								
+								<time datetime="2020-05-04T09:14:46.432Z">
+									2020-05-04
+								</time>
+							</span>
+							<h2 class="post-card-title"></h2>
+						</header>
+						<div class="post-card-excerpt">
+							<p>
+								
+								
+								
+								
+								
+								
+								Leetcode 1433题目给你两个字符串 s1 和 s2 ，它们长度相等，请你检查是否存在一个 s1  的排列可以打破 s2 的一个排列，或者是否存在一个 s2 的排列可以打破 s1 的一个排列。
+字符串 x 可以打破字符串 y （两者长度都为 n ）需满足对于所有 i（在 0 到 n - 1 之间）都有 x[i] &gt;= y[i]（字典序意义下的顺序）。
+示例 1：
+输入：s1 = “abc”, s2 = “xya”输出：true解释：”ayx” 是 s2=”xya
+								...
+							</p>
+						</div>
+					</a>
+					<footer class="post-card-meta">
+						<div class="author-list">
+							<div class="author-list-item">
+								<div class="author-name-tooltip">Neo</div>
+								
+								<a href="/about" class="static-avatar author-profile-image">
+									<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg>
+								</a>
+								
+							</div>
+						</div>
+						<span class="reading-time">
+							1
+							min read
+						</span>
+					</footer>
+				</div>
+			</article>
 			
 			<article class="post-card post  no-image ">
 				
@@ -175,9 +275,7 @@
 								
 								
 								
-								
-								
-								Python通过调用C来提升性能的一次记录​        昨天遇到的一个事，同事通过Python来处理其他家厂商的日志，将格式转换成内部日志格式，不是复杂的需
+								Python通过调用C来提升性能的一次记录​        昨天遇到的一个事，同事通过Python来处理其他家厂商的日志，将格式转换成内部日志格式，不是复杂的需求，但是遇到了性能瓶颈，单核大概8000qps，500w行的日志处理大概需要3min。申请了的是16核机器，考虑到多线程情况下的调度，单机10w的qps应该是有点勉强能达到的，而且实际测试的时候，虽然能达到，但是16核cpu基本都跑🈵️了。虽然机器只有这一个服务在跑，但是实际占用大量时间的还有磁盘IO等会阻塞的操作，
 								...
 							</p>
 						</div>
@@ -342,20 +440,24 @@
       
       
       <li>
+        <a href="/2020/06/09/Nginx启动流程/">Nginx启动流程</a>
+      </li>
+      
+      
+      
+      <li>
+        <a href="/2020/05/04/Leetcode 1433/"></a>
+      </li>
+      
+      
+      
+      <li>
         <a href="/2020/04/03/python调用C提升性能记录/">python调用C提升性能记录</a>
       </li>
       
       
       
-      <li>
-        <a href="/2020/03/10/Leetcode-861-ReverseMatrixScore/">Leetcode-861-ReverseMatrixScore</a>
-      </li>
       
-      
-      
-      <li>
-        <a href="/2020/03/09/Nginx-ngx-module-t结构体/">Nginx ngx_module_t结构体</a>
-      </li>
       
       
       
@@ -434,7 +536,7 @@
 		<h3 class="read-next-card-header-title">Tag Cloud</h3>
 	</header>
 	<div class="read-next-card-content-ext">
-		<a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 21.5px;">Leetcode</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16.5px;">nginx</a> <a href="/tags/算法/" style="font-size: 19px;">算法</a>
+		<a href="/tags/C/" style="font-size: 14px;">C</a> <a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 21.5px;">Leetcode</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16.5px;">nginx</a> <a href="/tags/算法/" style="font-size: 19px;">算法</a>
 	</div>
 </article>
 
