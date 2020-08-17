@@ -140,7 +140,7 @@
             <h1 class="site-title">
                 Archives
             </h1>
-            <h2 class="site-description">Total: 28</h2>
+            <h2 class="site-description">Total: 29</h2>
         </div>
         
         
@@ -151,6 +151,55 @@
 <div id="site-main" class="site-main outer" role="main">
 	<div class="inner">
 		<div class="post-feed">
+			
+			<article class="post-card post  no-image ">
+				
+				<div class="post-card-content">
+					<a class="post-card-content-link" title="Linux下信号API" href="/2020/08/16/Linux下信号API/">
+						<header class="post-card-header">
+							<span class="post-card-tags">
+								
+								| 
+								
+								<time datetime="2020-08-16T08:22:26.000Z">
+									2020-08-16
+								</time>
+							</span>
+							<h2 class="post-card-title">Linux下信号API</h2>
+						</header>
+						<div class="post-card-excerpt">
+							<p>
+								
+								
+								
+								
+								
+								
+								
+								
+								Linux 下的信号API之前在看Nginx源码，因为Nginx的许多行为都是通过信号来进行改变的， 比如nginx -s reload或者 改变二进制文件等，
+								...
+							</p>
+						</div>
+					</a>
+					<footer class="post-card-meta">
+						<div class="author-list">
+							<div class="author-list-item">
+								<div class="author-name-tooltip">Neo</div>
+								
+								<a href="/about" class="static-avatar author-profile-image">
+									<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg>
+								</a>
+								
+							</div>
+						</div>
+						<span class="reading-time">
+							19
+							min read
+						</span>
+					</footer>
+				</div>
+			</article>
 			
 			<article class="post-card post  no-image ">
 				
@@ -175,10 +224,9 @@
 								
 								
 								
-								
-								
 								Nginx启动流程记录看《深入理解Nginx》已经很久了，还是决定开始写博客来记录下，来回顾看书学到的东西。
-Nginx模块Nginx模块化做的十分优秀，这其实
+Nginx模块Nginx模块化做的十分优秀，这其实得益于ngx本身的数据结构，先看最基本的模块 ngx_module_t
+1234567891011121314151617181920212223242526272829303132333435363738394041struct ngx_module_s &#123;    // 当前模块在本类模块中的顺序   如 
 								...
 							</p>
 						</div>
@@ -598,56 +646,6 @@ The same repeated number m
 				</div>
 			</article>
 			
-			<article class="post-card post  no-image ">
-				
-				<div class="post-card-content">
-					<a class="post-card-content-link" title="Leetcode-169-MajorityElement" href="/2019/10/16/Leetcode-169-MajorityElement/">
-						<header class="post-card-header">
-							<span class="post-card-tags">
-								
-								| 
-								
-								<time datetime="2019-10-16T01:32:47.000Z">
-									2019-10-16
-								</time>
-							</span>
-							<h2 class="post-card-title">Leetcode-169-MajorityElement</h2>
-						</header>
-						<div class="post-card-excerpt">
-							<p>
-								
-								
-								
-								
-								
-								
-								Leetcode 169 Majority Element一道挺经典的题，记录下 =  = 
-题目
-Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
-You may assume that the array is non-empty and the majority ele
-								...
-							</p>
-						</div>
-					</a>
-					<footer class="post-card-meta">
-						<div class="author-list">
-							<div class="author-list-item">
-								<div class="author-name-tooltip">Neo</div>
-								
-								<a href="/about" class="static-avatar author-profile-image">
-									<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg>
-								</a>
-								
-							</div>
-						</div>
-						<span class="reading-time">
-							2
-							min read
-						</span>
-					</footer>
-				</div>
-			</article>
-			
 		</div>
 	</div>
 </div>
@@ -692,6 +690,12 @@ You may assume that the array is non-empty and the majority ele
       
       
       <li>
+        <a href="/2020/08/16/Linux下信号API/">Linux下信号API</a>
+      </li>
+      
+      
+      
+      <li>
         <a href="/2020/06/09/Nginx启动流程/">Nginx启动流程</a>
       </li>
       
@@ -702,10 +706,6 @@ You may assume that the array is non-empty and the majority ele
       </li>
       
       
-      
-      <li>
-        <a href="/2020/04/03/python调用C提升性能记录/">python调用C提升性能记录</a>
-      </li>
       
       
       
@@ -788,7 +788,7 @@ You may assume that the array is non-empty and the majority ele
 		<h3 class="read-next-card-header-title">Tag Cloud</h3>
 	</header>
 	<div class="read-next-card-content-ext">
-		<a href="/tags/C/" style="font-size: 14px;">C</a> <a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 21.5px;">Leetcode</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16.5px;">nginx</a> <a href="/tags/算法/" style="font-size: 19px;">算法</a>
+		<a href="/tags/C/" style="font-size: 14px;">C</a> <a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 21.5px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16.5px;">nginx</a> <a href="/tags/算法/" style="font-size: 19px;">算法</a>
 	</div>
 </article>
 

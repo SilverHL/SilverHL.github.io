@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+
+
+
+
+
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="preconnect" href="//www.googletagmanager.com">
+	<link rel="preconnect" href="//zz.bdstatic.com">
+	<link rel="preconnect" href="//sp0.baidu.com">
+	<link rel="preconnect" href="//www.google-analytics.com">
+	<link rel="preconnect" href="//cdn1.lncld.net">
+	<link rel="preconnect" href="//unpkg.com">
+	<link rel="preconnect" href="//app-router.leancloud.cn">
+	<link rel="preconnect" href="//9qpuwspm.api.lncld.net">
+	<link rel="preconnect" href="//gravatar.loli.net">
+
+	<title>Linux下信号API | Neo刷水题的地方</title>
+
+	<meta name="HandheldFriendly" content="True">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+	<meta name="generator" content="hexo">
+	<meta name="author" content="Neo">
+	<meta name="description" content>
+
+	
+	<meta name="keywords" content>
+	
+
+	
+	<link rel="shortcut icon" href="https://i.loli.net/2017/11/26/5a19c0b50432e.png">
+	<link rel="apple-touch-icon" href="https://i.loli.net/2017/11/26/5a19c0b50432e.png">
+	
+
+	
+	<meta name="theme-color" content="#3c484e">
+	<meta name="msapplication-TileColor" content="#3c484e">
+	
+
+	
+
+	
+
+	<meta property="og:site_name" content="Neo刷水题的地方">
+	<meta property="og:type" content="article">
+	<meta property="og:title" content="Linux下信号API | Neo刷水题的地方">
+	<meta property="og:description" content>
+	<meta property="og:url" content="http://yoursite.c/2020/08/16/Linux下信号API/">
+
+	
+	<meta property="article:published_time" content="2020-08-16T16:08:00+08:00"> 
+	<meta property="article:author" content="Neo">
+	<meta property="article:published_first" content="Neo刷水题的地方, /2020/08/16/Linux下信号API/">
+	
+
+	
+	
+	<link rel="stylesheet" href="/css/allinonecss.min.css">
+
+	
+	
+	
+</head>
+<body class="post-template">
+	<div class="site-wrapper">
+		
+
+
+
+
+<header class="site-header post-site-header outer">
+    <div class="inner">
+        
+<nav class="site-nav"> 
+    <div class="site-nav-left">
+        <ul class="nav">
+            <li>
+                
+                <a href="/" title="Home">HOME</a>
+                
+            </li>
+            
+            
+            <li>
+                <a href="/about" title="ABOUT">ABOUT</a>
+            </li>
+            
+            <li>
+                <a href="/archives" title="ARCHIVES">ARCHIVES</a>
+            </li>
+            
+            
+        </ul> 
+    </div>
+    
+    <div class="search-button-area">
+        <a href="#search" class="search-button">Search ...</a>
+    </div>
+     
+    <div class="site-nav-right">
+        
+        <a href="#search" class="search-button">Search ...</a>
+         
+        
+<div class="social-links">
+    
+    <a class="social-link" title="weibo" href="https://weibo.com/xzhih" target="_blank" rel="noopener">
+        <svg viewbox="0 0 1141 1024" xmlns="http://www.w3.org/2000/svg"><path d="M916.48 518.144q27.648 21.504 38.912 51.712t9.216 62.976-14.336 65.536-31.744 59.392q-34.816 48.128-78.848 81.92t-91.136 56.32-94.72 35.328-89.6 18.944-75.264 7.68-51.712 1.536-49.152-2.56-68.096-10.24-78.336-21.504-79.872-36.352-74.24-55.296-59.904-78.848q-16.384-29.696-22.016-63.488t-5.632-86.016q0-22.528 7.68-51.2t27.136-63.488 53.248-75.776 86.016-90.112q51.2-48.128 105.984-85.504t117.248-57.856q28.672-10.24 63.488-11.264t57.344 11.264q10.24 11.264 19.456 23.04t12.288 29.184q3.072 14.336 0.512 27.648t-5.632 26.624-5.12 25.6 2.048 22.528q17.408 2.048 33.792-1.536t31.744-9.216 31.232-11.776 33.28-9.216q27.648-5.12 54.784-4.608t49.152 7.68 36.352 22.016 17.408 38.4q2.048 14.336-2.048 26.624t-8.704 23.04-7.168 22.016 1.536 23.552q3.072 7.168 14.848 13.312t27.136 12.288 32.256 13.312 29.184 16.384zM658.432 836.608q26.624-16.384 53.76-45.056t44.032-64 18.944-75.776-20.48-81.408q-19.456-33.792-47.616-57.344t-62.976-37.376-74.24-19.968-80.384-6.144q-78.848 0-139.776 16.384t-105.472 43.008-72.192 60.416-38.912 68.608q-11.264 33.792-6.656 67.072t20.992 62.976 42.496 53.248 57.856 37.888q58.368 25.6 119.296 32.256t116.224 0.512 100.864-21.504 74.24-33.792zM524.288 513.024q20.48 8.192 38.912 18.432t32.768 27.648q10.24 12.288 17.92 30.72t10.752 39.424 1.536 42.496-9.728 38.912q-8.192 18.432-19.968 37.376t-28.672 35.328-40.448 29.184-57.344 18.944q-61.44 11.264-117.76-11.264t-88.064-74.752q-12.288-39.936-13.312-70.656t16.384-66.56q13.312-27.648 40.448-51.712t62.464-38.912 75.264-17.408 78.848 12.8zM361.472 764.928q37.888 3.072 57.856-18.432t21.504-48.128-15.36-47.616-52.736-16.896q-27.648 3.072-43.008 23.552t-17.408 43.52 9.728 42.496 39.424 21.504zM780.288 6.144q74.752 0 139.776 19.968t113.664 57.856 76.288 92.16 27.648 122.88q0 33.792-16.384 50.688t-35.328 17.408-35.328-14.336-16.384-45.568q0-40.96-22.528-77.824t-59.392-64.512-84.48-43.52-96.768-15.872q-31.744 0-47.104-15.36t-14.336-34.304 18.944-34.304 51.712-15.36zM780.288 169.984q95.232 0 144.384 48.64t49.152 146.944q0 30.72-10.24 43.52t-22.528 11.264-22.528-14.848-10.24-35.84q0-60.416-34.816-96.256t-93.184-35.84q-19.456 0-28.672-10.752t-9.216-23.04 9.728-23.04 28.16-10.752z"/></svg>
+    </a>
+    
+    
+    <a class="social-link" title="github" href="https://github.com/silverhl" target="_blank" rel="noopener">
+        <svg viewbox="0 0 1049 1024" xmlns="http://www.w3.org/2000/svg"><path d="M524.979332 0C234.676191 0 0 234.676191 0 524.979332c0 232.068678 150.366597 428.501342 358.967656 498.035028 26.075132 5.215026 35.636014-11.299224 35.636014-25.205961 0-12.168395-0.869171-53.888607-0.869171-97.347161-146.020741 31.290159-176.441729-62.580318-176.441729-62.580318-23.467619-60.841976-58.234462-76.487055-58.234463-76.487055-47.804409-32.15933 3.476684-32.15933 3.476685-32.15933 53.019436 3.476684 80.83291 53.888607 80.83291 53.888607 46.935238 79.963739 122.553122 57.365291 152.97411 43.458554 4.345855-33.897672 18.252593-57.365291 33.028501-70.402857-116.468925-12.168395-239.022047-57.365291-239.022047-259.012982 0-57.365291 20.860106-104.300529 53.888607-140.805715-5.215026-13.037566-23.467619-66.926173 5.215027-139.067372 0 0 44.327725-13.906737 144.282399 53.888607 41.720212-11.299224 86.917108-17.383422 131.244833-17.383422s89.524621 6.084198 131.244833 17.383422C756.178839 203.386032 800.506564 217.29277 800.506564 217.29277c28.682646 72.1412 10.430053 126.029806 5.215026 139.067372 33.897672 36.505185 53.888607 83.440424 53.888607 140.805715 0 201.64769-122.553122 245.975415-239.891218 259.012982 19.121764 16.514251 35.636014 47.804409 35.636015 97.347161 0 70.402857-0.869171 126.898978-0.869172 144.282399 0 13.906737 9.560882 30.420988 35.636015 25.205961 208.601059-69.533686 358.967656-265.96635 358.967655-498.035028C1049.958663 234.676191 814.413301 0 524.979332 0z"/></svg>
+    </a>
+    
+    
+    <a class="social-link" title="facebook" href="https://facebook" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+
+    </a>
+    
+    
+    <a class="social-link" title="twitter" href="https://twitter.com" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+
+    </a>
+    
+    
+    
+    
+</div>
+    </div>
+</nav>
+    </div>
+</header>
+
+
+<div id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+        <header class="post-full-header">
+            <div class="post-full-meta">
+                <time class="post-full-meta-date" datetime="2020-08-16T08:22:26.000Z">
+                    2020-08-16
+                </time>
+                
+                <span class="date-divider">/</span>
+                
+                
+            </div>
+            <h1 class="post-full-title">Linux下信号API</h1>
+        </header>
+        <div class="post-full no-image">
+            
+            <div class="post-full-content">
+                <article id="photoswipe" class="markdown-body">
+                    <h1 id="Linux-下的信号API"><a href="#Linux-下的信号API" class="headerlink" title="Linux 下的信号API"></a>Linux 下的信号API</h1><p>之前在看Nginx源码，因为Nginx的许多行为都是通过信号来进行改变的， 比如nginx -s reload或者 改变二进制文件等，今天特意来整理下信号相关的API。</p>
+<h2 id="Linux下的信号处理阶段"><a href="#Linux下的信号处理阶段" class="headerlink" title="Linux下的信号处理阶段"></a>Linux下的信号处理阶段</h2><p>先放一张图：</p>
+<p><img alt class="post-img b-lazy" data-img="https://raw.githubusercontent.com/SilverHL/image_repo/test/signal_process.png" data-index="0" data-src="https://raw.githubusercontent.com/SilverHL/image_repo/test/signal_process.png"></p>
+<p>信号从发出到实际调用handler去处理，可能会经历以下几个阶段，有Blocking(阻塞)，Pending(未决)， Delivery(递达) (但是实际上Blocking与Pending应该是同一个阶段，接下来会说明)。</p>
+<p>一个信号，被系统调用实际的handler处理的时候，被称为Delivery(递达)状态，在递达状态之前，该信号<strong>一直都是未决(Pending)状态</strong>的，当然被目标进程block的信号会持续保持未决状态，直到该信号被unblock。而SIGIGNORE只是一个递达态的信号的handler，代表我对这个信号不做任何处理，<strong>此处应当与信号被阻塞区分开来。</strong></p>
+<h2 id="Linux下的信号API"><a href="#Linux下的信号API" class="headerlink" title="Linux下的信号API"></a>Linux下的信号API</h2><h3 id="基础数据结构及操作函数"><a href="#基础数据结构及操作函数" class="headerlink" title="基础数据结构及操作函数"></a>基础数据结构及操作函数</h3><p>先来看下基础的数据结构sigset_t</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> sig[_NSIG_WORDS];</span><br><span class="line">&#125; <span class="keyword">sigset_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>sigset_t表示的是一组信号，即一个信号集，然后来看下对信号集的操作。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">int sigemptyset(sigset_t *set)；</span><br><span class="line"></span><br><span class="line">int sigfillset(sigset_t *set)；</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigaddset</span><span class="params">(<span class="keyword">sigset_t</span> *<span class="built_in">set</span>, <span class="keyword">int</span> signum)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line">int sigdelset(sigset_t *set, int signum)；</span><br><span class="line"></span><br><span class="line">int sigismember(const sigset_t *set, int signum)；</span><br></pre></td></tr></table></figure>
+
+<p>sigemptyset(sigset_t *set)初始化由set指定的信号集，信号集里面的所有信号被清空，相当于64为置0；<br>sigfillset(sigset_t *set)调用该函数后，set指向的信号集中将包含linux支持的64种信号，相当于64为都置1；<br>sigaddset(sigset_t *set, int signum)在set指向的信号集中加入signum信号，相当于将给定信号所对应的位置1；<br>sigdelset(sigset_t *set, int signum)在set指向的信号集中删除signum信号，相当于将给定信号所对应的位置0；<br>sigismember(const sigset_t *set, int signum)判定信号signum是否在set指向的信号集中，相当于检查给定信号所对应的位是0还是1。</p>
+<p>写个代码试下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_signal_number</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">travse_set</span><span class="params">(<span class="keyword">sigset_t</span> *)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    test_signal_number();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_signal_number</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">sigset_t</span> <span class="built_in">set</span>;</span><br><span class="line">    sigempty(&amp;<span class="built_in">set</span>);</span><br><span class="line">    sigaddset(&amp;<span class="built_in">set</span>, SIGUSR1);</span><br><span class="line">    sigaddset(&amp;<span class="built_in">set</span>, SIGHUP);</span><br><span class="line">    sigaddset(&amp;<span class="built_in">set</span>, SIGTERM);</span><br><span class="line"></span><br><span class="line">    travse_set(&amp;<span class="built_in">set</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">travse_set</span><span class="params">(<span class="keyword">sigset_t</span> *<span class="built_in">set</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; NSIG; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (sigismember(<span class="built_in">set</span>, i)) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"1"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"0"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译下，输出结果如下：</p>
+<blockquote>
+<p>11000000001000010000000000000000000000000000000000000000000000000</p>
+</blockquote>
+<p>可以看到，在信号集里的信号都输出了1，再来看下别的信号操作函数.</p>
+<h3 id="信号阻塞及未决操作相关函数"><a href="#信号阻塞及未决操作相关函数" class="headerlink" title="信号阻塞及未决操作相关函数"></a>信号阻塞及未决操作相关函数</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">int  sigprocmask(int  how,  const  sigset_t *set, sigset_t *oldset))；</span><br><span class="line"></span><br><span class="line">int sigpending(sigset_t *set));</span><br><span class="line"></span><br><span class="line">int sigsuspend(const sigset_t *mask))；</span><br></pre></td></tr></table></figure>
+
+<p>sigprocmask看下man手册的定义及使用方法:</p>
+<p>NAME<br>       sigprocmask - examine and change blocked signals</p>
+<p>SYNOPSIS<br>       #include &lt;signal.h&gt;</p>
+<pre><code>int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);</code></pre><p>   Feature Test Macro Requirements for glibc (see feature_test_macros(7)):</p>
+<pre><code>sigprocmask(): _POSIX_C_SOURCE &gt;= 1 || _XOPEN_SOURCE || _POSIX_SOURCE</code></pre><p>DESCRIPTION<br>       sigprocmask() is used to fetch and/or change the signal mask of the calling thread.  The signal mask is the set of signals whose delivery is currently blocked for the caller<br>       (see also signal(7) for more details).</p>
+<pre><code>The behavior of the call is dependent on the value of how, as follows.
+
+SIG_BLOCK
+       The set of blocked signals is the union of the current set and the set argument.
+
+SIG_UNBLOCK
+       The signals in set are removed from the current set of blocked signals.  It is permissible to attempt to unblock a signal which is not blocked.
+
+SIG_SETMASK
+       The set of blocked signals is set to the argument set.
+
+If oldset is non-NULL, the previous value of the signal mask is stored in oldset.
+
+If set is NULL, then the signal mask is unchanged (i.e., how is ignored), but the current value of the signal mask is nevertheless returned in oldset (if it is not NULL).
+
+The use of sigprocmask() is unspecified in a multithreaded process; see pthread_sigmask(3).</code></pre><p>可以看到，sigprocmask实际是用于改变调用线程的信号掩码，所有在该信号掩码中的信号，在被线程收到时都将会陷入到block状态中，how参数有如下三个值：</p>
+<p>SIG_BLOCK: block set中所有的信号。<br>SIG_UNBLIOCK: unblock set中的所有信号，如果当前被传入的set中存在当前线程未block的信号也是被允许的。<br>SIG_SETMASK: 获取当前线程中所有被阻塞的信号。</p>
+<p>同时也特别说明了, 如果oldset参数是NON-NULL的, 旧的参数会被传入到oldset中。</p>
+<p>下面来看下sigpending方法的用法。</p>
+<p>SYNOPSIS<br>       #include &lt;signal.h&gt;</p>
+<pre><code>int sigpending(sigset_t *set);</code></pre><p>   Feature Test Macro Requirements for glibc (see feature_test_macros(7)):</p>
+<pre><code>sigpending(): _POSIX_C_SOURCE &gt;= 1 || _XOPEN_SOURCE || _POSIX_SOURCE</code></pre><p>DESCRIPTION<br>       sigpending()  returns  the  set of signals that are pending for delivery to the calling thread (i.e., the signals which have been raised while blocked).  The mask of pending<br>       signals is returned in set.</p>
+<p>可以看到，sigpending是获取所有当前线程收到的未决状态的信号并存到set参数中。</p>
+<p>然后是sigsuspend方法。</p>
+<p>SYNOPSIS<br>       #include &lt;signal.h&gt;</p>
+<pre><code>int sigsuspend(const sigset_t *mask);</code></pre><p>   Feature Test Macro Requirements for glibc (see feature_test_macros(7)):</p>
+<pre><code>sigsuspend(): _POSIX_C_SOURCE &gt;= 1 || _XOPEN_SOURCE || _POSIX_SOURCE</code></pre><p>DESCRIPTION<br>       sigsuspend() temporarily replaces the signal mask of the calling process with the mask given by mask and then suspends the process until delivery of a signal whose action is<br>       to invoke a signal handler or to terminate a process.</p>
+<pre><code>If the signal terminates the process, then sigsuspend() does not return.  If the signal is caught, then sigsuspend() returns after the signal handler returns, and the signal
+mask is restored to the state before the call to sigsuspend().
+
+It is not possible to block SIGKILL or SIGSTOP; specifying these signals in mask, has no effect on the process&apos;s signal mask.</code></pre><p>sigsuspend会暂时用mask参数中的参数去替换当前进程的信号掩码(即当前进程屏蔽的信号)，然后停止当前进程的执行，直到收到mask中的信号，调用对应的处理函数(handler)，并在handler返回后返回，恢复原进程的信号掩码，继续向下执行。</p>
+<p>写段代码来验证一下这几个函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ERR_MSG(errno) do &#123; \</span></span><br><span class="line">    perror(errno); \</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">-1</span>); \ </span><br><span class="line">&#125; <span class="keyword">while</span> (<span class="number">0</span>) \</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_signal_number</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sig_usr2_handler</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">sigset_t</span> <span class="built_in">set</span>;</span><br><span class="line">    <span class="keyword">sigset_t</span> pset;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> <span class="title">act</span>;</span></span><br><span class="line"></span><br><span class="line">    sigemptyset(&amp;<span class="built_in">set</span>);</span><br><span class="line">    sigaddset(&amp;<span class="built_in">set</span>, SIGUSR1);</span><br><span class="line">    sigaddset(&amp;<span class="built_in">set</span>, SIGHUP);</span><br><span class="line">    sigaddset(&amp;<span class="built_in">set</span>, SIGTERM);</span><br><span class="line">    act.sa_handler = sig_usr2_handler;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (sigaction(SIGUSR2, &amp;act, <span class="literal">NULL</span>) == SIG_ERR) &#123;</span><br><span class="line">        ERR_MSG(<span class="string">"sigaction error"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (sigprocmask(SIG_BLOCK, &amp;<span class="built_in">set</span>, <span class="literal">NULL</span>) == SIG_ERR) &#123;</span><br><span class="line">        ERR_MSG(<span class="string">"sigprocmask error"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ( ; ;) &#123;</span><br><span class="line">        sigpending(&amp;bset);</span><br><span class="line">        printsigset(&amp;bset);</span><br><span class="line">        sleep(<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sig_usr2_handler</span><span class="params">(<span class="keyword">int</span> signo)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sig_usr2_handler\n"</span>);</span><br><span class="line">    <span class="keyword">sigset_t</span> <span class="built_in">set</span>;</span><br><span class="line">    sigemptyset(&amp;<span class="built_in">set</span>);</span><br><span class="line">    sigaddset(&amp;<span class="built_in">set</span>, SIGHUP);</span><br><span class="line">    sigprocmask(SIG_UNBLOCK, &amp;<span class="built_in">set</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printsigset</span><span class="params">(<span class="keyword">sigset_t</span> *<span class="built_in">set</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">1</span>; i&lt;NSIG; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (sigismember(<span class="built_in">set</span>, i))</span><br><span class="line">            <span class="built_in">putchar</span>(<span class="string">'1'</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">putchar</span>(<span class="string">'0'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先将 SIGUSR1, SIGHUP, SIGTERM加入到信号集中，并将这些信号屏蔽，然后在SIGUSR2的handler中将SIGHUP信号unblock,然后2秒查看当前收到的未决信号。</p>
+<p>我们先向进程发送一个SIGHUP信号，然后发现每次打印的信号集中都有SIGHUP信号，这是因为SIGHUP信号被屏蔽，一直处在未决状态，然后发送SIGUSR2信号，会发现进程因为收到SIGHUP挂掉，符合预期。</p>
+<p><img alt class="post-img b-lazy" data-img="https://raw.githubusercontent.com/SilverHL/image_repo/test/kill_HUP_N_USR2.png" data-index="1" data-src="https://raw.githubusercontent.com/SilverHL/image_repo/test/kill_HUP_N_USR2.png"></p>
+<p><img alt class="post-img b-lazy" data-img="https://raw.githubusercontent.com/SilverHL/image_repo/test/SIGHUP_unblock.png" data-index="2" data-src="https://raw.githubusercontent.com/SilverHL/image_repo/test/SIGHUP_unblock.png"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _SIGNAL_H</span></span><br><span class="line"><span class="meta">#defing _SIGNAL_H</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> <span class="keyword">sig_atomic_t</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="keyword">sigset_t</span>;</span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _NSIG     32					<span class="comment">//定义信号</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NSIG      _NSIG</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGHUP		1  <span class="comment">//hang up 挂断控制终端或进程</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGINT		2  <span class="comment">//interrupt 来自键盘的中断</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGQUIE		3  <span class="comment">//quit	退出</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGILL		4  <span class="comment">//illeagle 非法指令</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGTRAP  	5  <span class="comment">//trap   跟踪断点</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGABORT	6  <span class="comment">//Abort  异常结束</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGIOT		6  <span class="comment">//IO trap  异常   </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGUNUSED	7  <span class="comment">//Unused 没有使用</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGFPE		8  <span class="comment">//FPE 协处理器出错</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGKILL		9  <span class="comment">//kill  强迫终止</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGUSR1		10 <span class="comment">//use1  用户信号1,进程可使用</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGSEGV		11 <span class="comment">//segment violation 无效内存引用</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGUSR2		12 <span class="comment">//user2  用户信号2,进程可使用</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGPIPE		13 <span class="comment">//pipe  管道写出错</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGALRM		14 <span class="comment">//alarm  实时定时器报警</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGTERM		15 <span class="comment">//terminate 进程终止</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGSTKFLT	16 <span class="comment">//stack Fault 栈出错</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGCHLD		17 <span class="comment">//child 子进程停止</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGCONT		18 <span class="comment">//continue 回复进程继续</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGSTOP		19 <span class="comment">//stop  停止进程执行</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGTSTP		20 <span class="comment">//tty stop tty发出停止进程</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGTTIN		21 <span class="comment">//tty in  后台进程请求输入</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIGTTOU		22 <span class="comment">//tty out 后台进程请求输出</span></span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SA_NOCLDSTOP 1 <span class="comment">//进程处于停止状态,就不对sigchild进行处理</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SA_NOMASK	 0X40000000</span></span><br><span class="line"><span class="comment">//不阻止在指定的信号处理程序中再收到该信号</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SA_ONESHOT 0X80000000</span></span><br><span class="line"><span class="comment">//信号句柄一旦被调用就恢复到默认处理句柄</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_BLOCK  <span class="comment">//在阻塞信号集中加上给定的信号集</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_UNBLOCK<span class="comment">//从阻塞信号集中删除指定的信号集</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_SETMASK<span class="comment">//设置阻塞信号集(信号屏蔽码)</span></span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_DFL 	((void(*)(int))0) <span class="comment">//默认信号处理程序</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_IGN		((void (*)(int))1)<span class="comment">//忽略信号处理程序</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> </span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*这是sigaction数据结构.sa_handler是对因某信号指定要采取的行动,可以使用上面的SIG_DFL,</span></span><br><span class="line"><span class="comment">*SIG_IGN.也可以指向处理该信号函数的一个指针.</span></span><br><span class="line"><span class="comment">*sa_mask给出了对信号的屏蔽码,在信号程序执行时将阻塞对这些信号的处理</span></span><br><span class="line"><span class="comment">*sa_flag指定改变信号处理过程的信号集</span></span><br><span class="line"><span class="comment">*sa_restorer是恢复函数指针，由函数库libc提供</span></span><br><span class="line"><span class="comment">*另外，引起触发信号处理的信号也将被阻塞,</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span>&#123;</span></span><br><span class="line">				<span class="keyword">void</span> (*sa_handler)(<span class="keyword">int</span>);</span><br><span class="line">				<span class="keyword">sigset_t</span> sa_mask;</span><br><span class="line">				<span class="keyword">int</span> sa_flags;</span><br><span class="line">				<span class="keyword">void</span> (*sa_restorer)(<span class="keyword">void</span>);</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line"><span class="comment">//signal用于向信号_sig安装一个新的信号处理函数</span></span><br><span class="line"><span class="keyword">void</span> (*signal(<span class="keyword">int</span> _sig,<span class="keyword">void</span> (*_func)(<span class="keyword">int</span>)))(<span class="keyword">int</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">//raise用于向当前进程自身发信号,kill用于向任何进程或进程组发任何信号</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">raise</span><span class="params">(<span class="keyword">int</span> sig)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kill</span><span class="params">(<span class="keyword">pid_t</span> pid,<span class="keyword">int</span> sig)</span></span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*进程的任务结构中有一个以比特位表示当前进程待处理的32位信号段signal,还有一个</span></span><br><span class="line"><span class="comment">*同样以比特位表示的用于屏蔽进场当前阻塞信号集合blocked。</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">//sigaddset和sigdelset用于对信号集中的信号进行增减修改.</span></span><br><span class="line"><span class="comment">//sigaddset用于向mask指向的信号集合增加指定的信号signo,sigdelset则相反</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigaddset</span><span class="params">(<span class="keyword">sigset_t</span> *mask,<span class="keyword">int</span> signo)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigdelset</span><span class="params">(<span class="keyword">sigset_t</span> *mask,<span class="keyword">int</span> signo)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">//sigemptyset和sigfillset用于初始化进程屏蔽信号集，每个程序在使用信号集前,都需要使用</span></span><br><span class="line"><span class="comment">//这两个函数之一对屏蔽信号集进行初始化.sigemptyset用于清空屏蔽的所有信号，也即</span></span><br><span class="line"><span class="comment">//响应所有信号,sigfillset向信号集加入所有信号,也即屏蔽所有信号</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigemptyset</span><span class="params">(<span class="keyword">sigset_t</span> *mask)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigfillset</span><span class="params">(<span class="keyword">sigset_t</span> *mask)</span></span>;</span><br><span class="line"><span class="comment">//用于测试一个指定信号是否在信号集中</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigismember</span><span class="params">(<span class="keyword">sigset_t</span> *mask,<span class="keyword">int</span> signo)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">//对set中断额信号进行检测，看是否有挂起的信号,</span></span><br><span class="line"><span class="comment">//在set中返回进程中当前被阻塞的信号集</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigpending</span><span class="params">(<span class="keyword">sigset_t</span> *<span class="built_in">set</span>)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">//用于改变进程目前被阻塞的信号集.若oldset不是null，则通过其返回进程当前屏蔽</span></span><br><span class="line">信号集,若<span class="built_in">set</span>指针不是null,则根据how指示修改进程屏蔽信号集</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigprocmask</span><span class="params">(<span class="keyword">int</span> how,<span class="keyword">sigset_t</span> *<span class="built_in">set</span>,<span class="keyword">sigset_t</span> *oldset)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">//用于sigmask临时替换进程的信号屏蔽码，然后暂停该进程直到收到一个信号</span></span><br><span class="line"><span class="comment">//若捕捉到一个信号并从该信号处理程序中返回,该函数也返回,并信号屏蔽码会恢复到</span></span><br><span class="line"><span class="comment">//调用前的值</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigsuspend</span><span class="params">(<span class="keyword">sigset_t</span> *sigmask)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">//sigaction用于改变进程在收到指定信号时所采取的的行动</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigaction</span><span class="params">(<span class="keyword">int</span> sig,struct sigaction *act,sigaction *oldact)</span></span>;</span><br></pre></td></tr></table></figure>
+                </article>
+                <ul class="tags-postTags">
+                    
+                    <li>
+                        <a href="/tags/Linux/" rel="tag"># Linux</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    
+    <nav id="gobottom" class="pagination">
+        
+        <span class="prev-next-post">·</span>
+        
+        <a class="next-post" title="Nginx启动流程" href="/2020/06/09/Nginx启动流程/">
+            Nginx启动流程 →
+        </a>
+        
+    </nav>
+
+    
+    <div class="inner">
+        <div id="comment"></div>
+    </div>
+    
+</div>
+
+<div class="toc-bar">
+    <div class="toc-btn-bar">
+        <a href="#site-main" class="toc-btn">
+            <svg viewbox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M793.024 710.272a32 32 0 1 0 45.952-44.544l-310.304-320a32 32 0 0 0-46.4 0.48l-297.696 320a32 32 0 0 0 46.848 43.584l274.752-295.328 286.848 295.808z"/></svg>
+        </a>
+        <div class="toc-btn toc-switch">
+            <svg class="toc-open" viewbox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M779.776 480h-387.2a32 32 0 0 0 0 64h387.2a32 32 0 0 0 0-64M779.776 672h-387.2a32 32 0 0 0 0 64h387.2a32 32 0 0 0 0-64M256 288a32 32 0 1 0 0 64 32 32 0 0 0 0-64M392.576 352h387.2a32 32 0 0 0 0-64h-387.2a32 32 0 0 0 0 64M256 480a32 32 0 1 0 0 64 32 32 0 0 0 0-64M256 672a32 32 0 1 0 0 64 32 32 0 0 0 0-64"/></svg>
+            <svg class="toc-close hide" viewbox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M512 960c-247.039484 0-448-200.960516-448-448S264.960516 64 512 64 960 264.960516 960 512 759.039484 960 512 960zM512 128.287273c-211.584464 0-383.712727 172.128262-383.712727 383.712727 0 211.551781 172.128262 383.712727 383.712727 383.712727 211.551781 0 383.712727-172.159226 383.712727-383.712727C895.712727 300.415536 723.551781 128.287273 512 128.287273z"/><path d="M557.05545 513.376159l138.367639-136.864185c12.576374-12.416396 12.672705-32.671738 0.25631-45.248112s-32.704421-12.672705-45.248112-0.25631l-138.560301 137.024163-136.447897-136.864185c-12.512727-12.512727-32.735385-12.576374-45.248112-0.063647-12.512727 12.480043-12.54369 32.735385-0.063647 45.248112l136.255235 136.671523-137.376804 135.904314c-12.576374 12.447359-12.672705 32.671738-0.25631 45.248112 6.271845 6.335493 14.496116 9.504099 22.751351 9.504099 8.12794 0 16.25588-3.103239 22.496761-9.247789l137.567746-136.064292 138.687596 139.136568c6.240882 6.271845 14.432469 9.407768 22.65674 9.407768 8.191587 0 16.352211-3.135923 22.591372-9.34412 12.512727-12.480043 12.54369-32.704421 0.063647-45.248112L557.05545 513.376159z"/></svg>
+        </div>
+        <a href="#gobottom" class="toc-btn">
+            <svg viewbox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M231.424 346.208a32 32 0 0 0-46.848 43.584l297.696 320a32 32 0 0 0 46.4 0.48l310.304-320a32 32 0 1 0-45.952-44.544l-286.848 295.808-274.752-295.36z"/></svg>
+        </a>
+    </div>
+    <div class="toc-main">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux-下的信号API"><span class="toc-text">Linux 下的信号API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux下的信号处理阶段"><span class="toc-text">Linux下的信号处理阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux下的信号API"><span class="toc-text">Linux下的信号API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础数据结构及操作函数"><span class="toc-text">基础数据结构及操作函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信号阻塞及未决操作相关函数"><span class="toc-text">信号阻塞及未决操作相关函数</span></a></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+	</div>
+	
+
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+            
+
+<article class="read-next-card" style="background-image: url(https://i.loli.net/2017/11/26/5a19c56faa29f.jpg)">
+  <header class="read-next-card-header">
+    <small class="read-next-card-header-sitetitle">&mdash; Neo刷水题的地方 &mdash;</small>
+    <h3 class="read-next-card-header-title">Recent Posts</h3>
+  </header>
+  <div class="read-next-divider">
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
+      <path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/>
+    </svg>
+  </div>
+  <div class="read-next-card-content">
+    <ul>
+      
+      
+      
+      <li>
+        <a href="/2020/08/16/Linux下信号API/">Linux下信号API</a>
+      </li>
+      
+      
+      
+      <li>
+        <a href="/2020/06/09/Nginx启动流程/">Nginx启动流程</a>
+      </li>
+      
+      
+      
+      <li>
+        <a href="/2020/05/04/Leetcode 1433/"></a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+  <footer class="read-next-card-footer">
+    <a href="/archives">  MORE  → </a>
+  </footer>
+</article>
+
+            
+            
+            
+
+<article class="read-next-card" style="background-image: url(https://i.loli.net/2017/11/26/5a19c56faa29f.jpg)">
+    <header class="read-next-card-header tagcloud-card">
+        <h3 class="read-next-card-header-title">Categories</h3>
+    </header>
+    <div class="read-next-card-content">
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+</article>
+
+
+            
+            
+            
+
+<article class="read-next-card" style="background-image: url(https://i.loli.net/2017/11/26/5a19c56faa29f.jpg)">
+	<header class="read-next-card-header tagcloud-card">
+		<h3 class="read-next-card-header-title">Tag Cloud</h3>
+	</header>
+	<div class="read-next-card-content-ext">
+		<a href="/tags/C/" style="font-size: 14px;">C</a> <a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 21.5px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16.5px;">nginx</a> <a href="/tags/算法/" style="font-size: 19px;">算法</a>
+	</div>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+	
+
+
+
+
+<div id="search" class="search-overlay">
+    <div class="search-form">
+        
+        <div class="search-overlay-logo">
+        	<img src="https://i.loli.net/2017/11/26/5a19c0b50432e.png" alt="Neo刷水题的地方">
+        </div>
+        
+        <input id="local-search-input" class="search-input" type="text" name="search" placeholder="Search ...">
+        <a class="search-overlay-close" href="#"></a>
+    </div>
+    <div id="local-search-result"></div>
+</div>
+
+<footer class="site-footer outer">
+	<div class="site-footer-content inner">
+		<div class="copyright">
+			<a href="/" title="Neo刷水题的地方">Neo刷水题的地方 &copy; 2020</a>
+			
+				
+			        <span hidden="true" id="/2020/08/16/Linux下信号API/" class="leancloud-visitors" data-flag-title="Linux下信号API">
+			            <span>阅读量 </span>
+			            <span class="leancloud-visitors-count">0</span>
+			        </span>
+	    		
+    		
+		</div>
+		<nav class="site-footer-nav">
+			
+			<a href="https://hexo.io" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+			<a href="https://github.com/xzhih/hexo-theme-casper" title="Casper" target="_blank" rel="noopener">Casper</a>
+		</nav>
+	</div>
+</footer>
+	
+
+
+<script>
+    if(window.navigator && navigator.serviceWorker) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister()
+            }
+        })
+    }
+</script>
+
+
+<script id="scriptLoad" src="/js/allinone.min.js" async></script>
+
+
+<script>
+    document.getElementById('scriptLoad').addEventListener('load', function () {
+        
+        
+            var bLazy = new Blazy();
+        
+
+        
+        
+
+        
+        
+        
+            searchFunc("/");
+        
+        
+    })
+</script>
+
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+
+
+<script id="valineScript" src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+<script>
+    document.getElementById('valineScript').addEventListener("load", function() {
+        new Valine({
+            el: '#comment' ,
+            verify: false,
+            notify: false,
+            appId: 'WP0vLXgnEz1WiBw9rkYBhJAj-gzGzoHsz',
+            appKey: 'T2mJxqhfwoyKmSgtmMBLW2AW',
+            placeholder: 'Just go go',
+            pageSize: 10,
+            avatar: 'mm',
+            visitor: true
+        })
+    });
+</script>
+
+
+
+
+
+</body>
+</html>
