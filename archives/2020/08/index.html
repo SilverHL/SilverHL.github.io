@@ -140,7 +140,7 @@
             <h1 class="site-title">
                 Archives
             </h1>
-            <h2 class="site-description">Total: 31</h2>
+            <h2 class="site-description">Total: 34</h2>
         </div>
         
         
@@ -151,6 +151,55 @@
 <div id="site-main" class="site-main outer" role="main">
 	<div class="inner">
 		<div class="post-feed">
+			
+			<article class="post-card post  no-image ">
+				
+				<div class="post-card-content">
+					<a class="post-card-content-link" title="Nginx处理一次HTTP请求" href="/2020/08/27/Nginx处理一次HTTP请求/">
+						<header class="post-card-header">
+							<span class="post-card-tags">
+								
+								| 
+								
+								<time datetime="2020-08-27T13:55:14.000Z">
+									2020-08-27
+								</time>
+							</span>
+							<h2 class="post-card-title">Nginx处理一次HTTP请求</h2>
+						</header>
+						<div class="post-card-excerpt">
+							<p>
+								
+								
+								
+								
+								
+								
+								
+								
+								完成的一次调用链 (开新坑，后面补上)ngx_process_events_and_timers               – worker/simple 进
+								...
+							</p>
+						</div>
+					</a>
+					<footer class="post-card-meta">
+						<div class="author-list">
+							<div class="author-list-item">
+								<div class="author-name-tooltip">Neo</div>
+								
+								<a href="/about" class="static-avatar author-profile-image">
+									<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg>
+								</a>
+								
+							</div>
+						</div>
+						<span class="reading-time">
+							1
+							min read
+						</span>
+					</footer>
+				</div>
+			</article>
 			
 			<article class="post-card post  no-image ">
 				
@@ -177,8 +226,6 @@
 								
 								
 								
-								
-								
 							</p>
 						</div>
 					</a>
@@ -195,6 +242,56 @@
 						</div>
 						<span class="reading-time">
 							0
+							min read
+						</span>
+					</footer>
+				</div>
+			</article>
+			
+			<article class="post-card post  no-image ">
+				
+				<div class="post-card-content">
+					<a class="post-card-content-link" title="Nginx进程" href="/2020/08/19/Nginx进程/">
+						<header class="post-card-header">
+							<span class="post-card-tags">
+								
+								| 
+								
+								<time datetime="2020-08-19T15:38:51.000Z">
+									2020-08-19
+								</time>
+							</span>
+							<h2 class="post-card-title">Nginx进程</h2>
+						</header>
+						<div class="post-card-excerpt">
+							<p>
+								
+								
+								
+								
+								
+								
+								nginx中一般的架构是由一个master进程管理N(一般与CPU核心数相同)个worker子进程，而当子进程挂掉，或者配置变更，需要重新读取配置，又或者更新了二进制文件，需要更新master进程，都需要有master进程来通过一个统一的ngx_process_spawn方法来启动子进程。
+进程类型我们先来看一下有几种进程以及对应的使用场景。
+
+#define NGX_PROCESS_NORESPAWN     -1#define NGX_PROCESS_JUST_SPAWN
+								...
+							</p>
+						</div>
+					</a>
+					<footer class="post-card-meta">
+						<div class="author-list">
+							<div class="author-list-item">
+								<div class="author-name-tooltip">Neo</div>
+								
+								<a href="/about" class="static-avatar author-profile-image">
+									<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg>
+								</a>
+								
+							</div>
+						</div>
+						<span class="reading-time">
+							18
 							min read
 						</span>
 					</footer>
@@ -242,6 +339,63 @@
 						</div>
 						<span class="reading-time">
 							0
+							min read
+						</span>
+					</footer>
+				</div>
+			</article>
+			
+			<article class="post-card post  no-image ">
+				
+				<div class="post-card-content">
+					<a class="post-card-content-link" title="Linux进程API" href="/2020/08/19/Linux进程API/">
+						<header class="post-card-header">
+							<span class="post-card-tags">
+								
+								| 
+								
+								<time datetime="2020-08-19T12:00:08.000Z">
+									2020-08-19
+								</time>
+							</span>
+							<h2 class="post-card-title">Linux进程API</h2>
+						</header>
+						<div class="post-card-excerpt">
+							<p>
+								
+								
+								
+								
+								
+								
+								来看下Linux下的进程相关的API。
+父子进程waitpid
+SYNOPSIS
+#include &lt;sys/types.h&gt;
+#include &lt;sys/wait.h&gt;
+
+
+pid_t wait(int *status);
+
+pid_t waitpid(pid_t pid, int *status, int options);
+ 这一系列的函数都是为了等待调用进程的子进程的状态改变而存在的，我们来看下waitpid(),第一个参数是一个pid_t类型
+								...
+							</p>
+						</div>
+					</a>
+					<footer class="post-card-meta">
+						<div class="author-list">
+							<div class="author-list-item">
+								<div class="author-name-tooltip">Neo</div>
+								
+								<a href="/about" class="static-avatar author-profile-image">
+									<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg>
+								</a>
+								
+							</div>
+						</div>
+						<span class="reading-time">
+							1
 							min read
 						</span>
 					</footer>
@@ -339,20 +493,26 @@ Linux下的信号处理阶段先放一张图：
       
       
       <li>
+        <a href="/2020/08/27/Nginx处理一次HTTP请求/">Nginx处理一次HTTP请求</a>
+      </li>
+      
+      
+      
+      <li>
         <a href="/2020/08/24/Nginx父子进程通信/">Nginx父子进程通信</a>
       </li>
       
       
       
       <li>
-        <a href="/2020/08/19/Untitled/"></a>
+        <a href="/2020/08/19/Nginx进程/">Nginx进程</a>
       </li>
       
       
       
-      <li>
-        <a href="/2020/08/16/Linux下信号API/">Linux下信号API</a>
-      </li>
+      
+      
+      
       
       
       
@@ -427,7 +587,7 @@ Linux下的信号处理阶段先放一张图：
         <h3 class="read-next-card-header-title">Categories</h3>
     </header>
     <div class="read-next-card-content">
-        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
     </div>
 </article>
 
@@ -441,7 +601,7 @@ Linux下的信号处理阶段先放一张图：
 		<h3 class="read-next-card-header-title">Tag Cloud</h3>
 	</header>
 	<div class="read-next-card-content-ext">
-		<a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 21.5px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16.5px;">nginx</a> <a href="/tags/算法/" style="font-size: 19px;">算法</a>
+		<a href="/tags/C/" style="font-size: 14px;">C</a> <a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 21.5px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 16.5px;">Linux</a> <a href="/tags/Nginx/" style="font-size: 16.5px;">Nginx</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16.5px;">nginx</a> <a href="/tags/算法/" style="font-size: 19px;">算法</a>
 	</div>
 </article>
 
