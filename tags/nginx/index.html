@@ -20,7 +20,7 @@
 	<link rel="preconnect" href="//9qpuwspm.api.lncld.net">
 	<link rel="preconnect" href="//gravatar.loli.net">
 
-	<title>Tag: Nginx | Neo刷水题的地方</title>
+	<title>Tag: nginx | Neo刷水题的地方</title>
 
 	<meta name="HandheldFriendly" content="True">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -48,9 +48,9 @@
 
 	<meta property="og:site_name" content="Neo刷水题的地方">
 	<meta property="og:type" content="blog">
-	<meta property="og:title" content="Tag: Nginx | Neo刷水题的地方">
+	<meta property="og:title" content="Tag: nginx | Neo刷水题的地方">
 	<meta property="og:description" content>
-	<meta property="og:url" content="http://yoursite.c/tags/Nginx/index.html">
+	<meta property="og:url" content="http://yoursite.c/tags/nginx/index.html">
 
 	
 
@@ -138,7 +138,7 @@
         <div class="site-header-content">
             
             <h1 class="site-title">
-                Tag: Nginx
+                Tag: nginx
             </h1>
             <h2 class="site-description">Tags</h2>
         </div>
@@ -155,17 +155,17 @@
 			<article class="post-card post  no-image ">
 				
 				<div class="post-card-content">
-					<a class="post-card-content-link" title="Nginx子进程循环处理事件流程" href="/2020/08/31/Nginx子进程循环处理事件流程/">
+					<a class="post-card-content-link" title="Nginx ngx_module_t结构体" href="/2020/03/09/Nginx-ngx-module-t结构体/">
 						<header class="post-card-header">
 							<span class="post-card-tags">
 								
 								| 
 								
-								<time datetime="2020-08-31T10:49:16.000Z">
-									2020-08-31
+								<time datetime="2020-03-09T11:02:46.000Z">
+									2020-03-09
 								</time>
 							</span>
-							<h2 class="post-card-title">Nginx子进程循环处理事件流程</h2>
+							<h2 class="post-card-title">Nginx ngx_module_t结构体</h2>
 						</header>
 						<div class="post-card-excerpt">
 							<p>
@@ -177,7 +177,8 @@
 								
 								
 								
-								事件处理这章马上要收尾啦，开始分析一遍事件处理中最核心也是最进化的部分，一个子进程的循环, 一般来说，当子进程被父进程spwan出来以后就会一直循环这个函数，一
+								Nginx ngx_module_t 结构体断断续续的记录一些nginx学习的内容。
+1234567891011121314151617181920212223
 								...
 							</p>
 						</div>
@@ -194,7 +195,7 @@
 							</div>
 						</div>
 						<span class="reading-time">
-							21
+							3
 							min read
 						</span>
 					</footer>
@@ -204,17 +205,17 @@
 			<article class="post-card post  no-image ">
 				
 				<div class="post-card-content">
-					<a class="post-card-content-link" title="Nginx处理一次HTTP请求" href="/2020/08/27/Nginx处理一次HTTP请求/">
+					<a class="post-card-content-link" title="nginx编译笔记" href="/2019/10/07/nginx编译笔记/">
 						<header class="post-card-header">
 							<span class="post-card-tags">
 								
 								| 
 								
-								<time datetime="2020-08-27T13:55:14.000Z">
-									2020-08-27
+								<time datetime="2019-10-07T03:17:25.000Z">
+									2019-10-07
 								</time>
 							</span>
-							<h2 class="post-card-title">Nginx处理一次HTTP请求</h2>
+							<h2 class="post-card-title">nginx编译笔记</h2>
 						</header>
 						<div class="post-card-excerpt">
 							<p>
@@ -224,7 +225,12 @@
 								
 								
 								
-								完成的一次调用链 (开新坑，后面补上)ngx_process_events_and_timers               – worker/simple 进程循环||–&gt;ngx_epoll_process_events                – 多路复用处理事件的入口    |    |-&gt;ngx_event_accept                     – 准备accept新的连接  connection对应的回调       |      
+								
+最近要开始学习Nginx了，记录下编译的过程
+
+环境准备先安装了一个虚拟机，VMWare Fusion 11.5 Pro，然后搞了一个Cent OS iso镜像，第一次安装的时候选错了，选成极简版的了，安装也没有GNome桌面 = = ，重新安了一下以后，调整了IPV4，可以正常上网了。
+根据书中讲的折腾出来的configure参数。
+1./configure --with-openssl=/root/openssl-1.0.2f --with-libatomic --wi
 								...
 							</p>
 						</div>
@@ -242,56 +248,6 @@
 						</div>
 						<span class="reading-time">
 							1
-							min read
-						</span>
-					</footer>
-				</div>
-			</article>
-			
-			<article class="post-card post  no-image ">
-				
-				<div class="post-card-content">
-					<a class="post-card-content-link" title="Nginx进程" href="/2020/08/19/Nginx进程/">
-						<header class="post-card-header">
-							<span class="post-card-tags">
-								
-								| 
-								
-								<time datetime="2020-08-19T15:38:51.000Z">
-									2020-08-19
-								</time>
-							</span>
-							<h2 class="post-card-title">Nginx进程</h2>
-						</header>
-						<div class="post-card-excerpt">
-							<p>
-								
-								
-								
-								
-								
-								
-								nginx中一般的架构是由一个master进程管理N(一般与CPU核心数相同)个worker子进程，而当子进程挂掉，或者配置变更，需要重新读取配置，又或者更新了二进制文件，需要更新master进程，都需要有master进程来通过一个统一的ngx_process_spawn方法来启动子进程。
-进程类型我们先来看一下有几种进程以及对应的使用场景。
-
-#define NGX_PROCESS_NORESPAWN     -1#define NGX_PROCESS_JUST_SPAWN
-								...
-							</p>
-						</div>
-					</a>
-					<footer class="post-card-meta">
-						<div class="author-list">
-							<div class="author-list-item">
-								<div class="author-name-tooltip">Neo</div>
-								
-								<a href="/about" class="static-avatar author-profile-image">
-									<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg>
-								</a>
-								
-							</div>
-						</div>
-						<span class="reading-time">
-							18
 							min read
 						</span>
 					</footer>
@@ -338,20 +294,24 @@
       
       
       <li>
+        <a href="/2020/09/08/HTTP端口监听全流程/">HTTP端口监听全流程</a>
+      </li>
+      
+      
+      
+      <li>
+        <a href="/2020/09/01/Nginx配置解析全流程/">Nginx配置解析全流程</a>
+      </li>
+      
+      
+      
+      <li>
         <a href="/2020/08/31/Nginx子进程循环处理事件流程/">Nginx子进程循环处理事件流程</a>
       </li>
       
       
       
-      <li>
-        <a href="/2020/08/27/Nginx处理一次HTTP请求/">Nginx处理一次HTTP请求</a>
-      </li>
       
-      
-      
-      <li>
-        <a href="/2020/08/19/Nginx进程/">Nginx进程</a>
-      </li>
       
       
       
@@ -446,7 +406,255 @@
 		<h3 class="read-next-card-header-title">Tag Cloud</h3>
 	</header>
 	<div class="read-next-card-content-ext">
-		<a href="/tags/C/" style="font-size: 14px;">C</a> <a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 21.5px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 16.5px;">Linux</a> <a href="/tags/Nginx/" style="font-size: 19px;">Nginx</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16.5px;">nginx</a> <a href="/tags/算法/" style="font-size: 19px;">算法</a>
+		<a href="/tags/C/" style="font-size: 14px;">C</a> <a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 22px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Nginx/" style="font-size: 20px;">Nginx</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16px;">nginx</a> <a href="/tags/算法/" style="font-size: 18px;">算法</a>
+	</div>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+	
+
+
+
+
+<div id="search" class="search-overlay">
+    <div class="search-form">
+        
+        <div class="search-overlay-logo">
+        	<img src="https://i.loli.net/2017/11/26/5a19c0b50432e.png" alt="Neo刷水题的地方">
+        </div>
+        
+        <input id="local-search-input" class="search-input" type="text" name="search" placeholder="Search ...">
+        <a class="search-overlay-close" href="#"></a>
+    </div>
+    <div id="local-search-result"></div>
+</div>
+
+<footer class="site-footer outer">
+	<div class="site-footer-content inner">
+		<div class="copyright">
+			<a href="/" title="Neo刷水题的地方">Neo刷水题的地方 &copy; 2020</a>
+			
+		</div>
+		<nav class="site-footer-nav">
+			
+			<a href="https://hexo.io" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+			<a href="https://github.com/xzhih/hexo-theme-casper" title="Casper" target="_blank" rel="noopener">Casper</a>
+		</nav>
+	</div>
+</footer>
+	
+
+
+<script>
+    if(window.navigator && navigator.serviceWorker) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister()
+            }
+        })
+    }
+</script>
+
+
+<script id="scriptLoad" src="/js/allinone.min.js" async></script>
+
+
+<script>
+    document.getElementById('scriptLoad').addEventListener('load', function () {
+        
+        
+            var bLazy = new Blazy();
+        
+
+        
+        
+
+        
+        
+        
+            searchFunc("/");
+        
+        
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+div>
+						<span class="reading-time">
+							18
+							min read
+						</span>
+					</footer>
+				</div>
+			</article>
+			
+		</div>
+	</div>
+</div>
+
+
+
+<div class="outer">
+	<nav class="pagination">
+		
+	</nav>
+</div>
+
+
+
+	</div>
+	
+
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+            
+
+<article class="read-next-card" style="background-image: url(https://i.loli.net/2017/11/26/5a19c56faa29f.jpg)">
+  <header class="read-next-card-header">
+    <small class="read-next-card-header-sitetitle">&mdash; Neo刷水题的地方 &mdash;</small>
+    <h3 class="read-next-card-header-title">Recent Posts</h3>
+  </header>
+  <div class="read-next-divider">
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
+      <path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/>
+    </svg>
+  </div>
+  <div class="read-next-card-content">
+    <ul>
+      
+      
+      
+      <li>
+        <a href="/2020/09/08/HTTP端口监听全流程/">HTTP端口监听全流程</a>
+      </li>
+      
+      
+      
+      <li>
+        <a href="/2020/09/01/Nginx配置解析全流程/">Nginx配置解析全流程</a>
+      </li>
+      
+      
+      
+      <li>
+        <a href="/2020/08/31/Nginx子进程循环处理事件流程/">Nginx子进程循环处理事件流程</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+  <footer class="read-next-card-footer">
+    <a href="/archives">  MORE  → </a>
+  </footer>
+</article>
+
+            
+            
+            
+
+<article class="read-next-card" style="background-image: url(https://i.loli.net/2017/11/26/5a19c56faa29f.jpg)">
+    <header class="read-next-card-header tagcloud-card">
+        <h3 class="read-next-card-header-title">Categories</h3>
+    </header>
+    <div class="read-next-card-content">
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+</article>
+
+
+            
+            
+            
+
+<article class="read-next-card" style="background-image: url(https://i.loli.net/2017/11/26/5a19c56faa29f.jpg)">
+	<header class="read-next-card-header tagcloud-card">
+		<h3 class="read-next-card-header-title">Tag Cloud</h3>
+	</header>
+	<div class="read-next-card-content-ext">
+		<a href="/tags/C/" style="font-size: 14px;">C</a> <a href="/tags/C/" style="font-size: 24px;">C++</a> <a href="/tags/Leetcode/" style="font-size: 22px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Nginx/" style="font-size: 20px;">Nginx</a> <a href="/tags/dp/" style="font-size: 14px;">dp</a> <a href="/tags/greedy/" style="font-size: 14px;">greedy</a> <a href="/tags/nginx/" style="font-size: 16px;">nginx</a> <a href="/tags/算法/" style="font-size: 18px;">算法</a>
 	</div>
 </article>
 
