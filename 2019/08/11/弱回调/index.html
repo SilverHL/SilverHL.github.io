@@ -164,11 +164,7 @@
 <p>从第一章来看，主要讲的shared_ptr与weak_ptr的运用，其实大学的时候还有去分析过shared_ptr与weak_ptr的用法，但终归并没有实际去使用这两个推动了C++现代化的工具。</p>
 <h2 id="shared-ptr-与-weak-ptr简介"><a href="#shared-ptr-与-weak-ptr简介" class="headerlink" title="shared_ptr 与 weak_ptr简介"></a>shared_ptr 与 weak_ptr简介</h2><p>这两个工具基本上可以说是配套使用的，举个🌰，shared_ptr最大的特点是引用计数，对同一个对象的多次引用，其实质只是在 内部的计数器+1而已，但是如果遇到两个对象相互引用，就会形成死锁。此时就需要weak_ptr来打破僵局，weak_ptr引用的 对象，不会造成shared_ptr内部的计数器+1，可以理解为弱引用。但是本书中主要使用weak_ptr的地方多在于试探，看当前 的对象是否能从weak_ptr提升为shared_ptr,以此来保证对象并未被销毁。 </p>
 <h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>本书的代码其实是一点一点改进的，我就直接贴个最终版，然后一点一点分析好了=3=</p>
-<pre><code class="cpp"><span class="comment">//</span>
-<span class="comment">// Created by neojxwang(王靖煊) on 2019-08-08.</span>
-<span class="comment">//</span>
-
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span>
+<pre><code class="cpp"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span>
 <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span>
 
 <span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;
@@ -233,7 +229,6 @@
         }
     }
 };
-
 </code></pre>
 <p>假设有各个股票，每个股票有一个唯一代码key，我们唯一要做的就是通过这个key来取到股票的对象，但是获得这个对象在多进 程环境下其实是存在竞争的，假设如下情况，进程A刚刚通过get()方法获得了对应的股票对象，进程B被推上CPU，并对那个 股票对象进行了销毁操作，并切回进程A，那么此时，会出现coredump。</p>
 <p>所以我们最一开始的使用一个shared_ptr来存储map中的Stock对象，即<strong>std::map&lt;std::string, std::shared_ptr<stock>&gt;</stock></strong> 但是这样虽然可以方便对象的生命周期管理，但是此时的shared_ptr<strong>不会被销毁</strong>,所以我们该用weak_ptr来对 map中的Stock进行管理，只有在真正进行操作的时候，才将weak_ptr提升成shared_ptr。</p>
